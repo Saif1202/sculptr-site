@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>SculptR — AI training and nutrition that reshapes with you</title>
+<meta name="description" content="SculptR is your AI fitness coach. Adaptive workout and meal plans, all-in-one logging, AI calorie scanning from a photo, and daily rings to close. Free to start." />
+<link rel="canonical" href="https://sculptr-app.com/" />
+<link rel="icon" href="assets/favicon.png" />
+
+<!-- Open Graph / social preview -->
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://sculptr-app.com/" />
+<meta property="og:title" content="SculptR — AI training and nutrition that reshapes with you" />
+<meta property="og:description" content="Adaptive AI plans, all-in-one logging, and an AI coach that tunes your plan each week." />
+<meta property="og:image" content="https://sculptr-app.com/assets/app-icon.png" />
+<meta name="twitter:card" content="summary_large_image" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;0,800;0,900&family=Archivo+Black&display=swap" rel="stylesheet" />
+
+<style>
+  /* Playful Wellness palette, matching the app */
+  :root{
+    --cream:#FAF3EA; --white:#FFFFFF; --panel2:#F6EEE2; --line:#F0E6D9;
+    --cocoa:#443A33; --mute:#8D8178; --copper:#B87333; --copper-soft:#F3E4D0;
+    --sage:#DEEEDE; --sage-ink:#57A773; --sky:#DCEAF8; --sky-ink:#6FA3D8;
+    --peach:#FFE4D3; --butter:#FBEFC8; --gold:#E0A63C;
+    --shadow:0 10px 30px rgba(42,31,22,.08);
+    --maxw:1100px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; background:var(--cream); color:var(--cocoa);
+    font-family:'Nunito',system-ui,-apple-system,'Segoe UI',sans-serif;
+    font-weight:600; line-height:1.6; -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--copper); text-decoration:none}
+  a:hover{text-decoration:underline}
+  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 22px}
+  .wordmark{font-family:'Archivo Black',sans-serif; font-style:italic; letter-spacing:-.5px}
+  .wordmark span{color:var(--copper)}
+
+  /* Nav */
+  header{position:sticky; top:0; z-index:50; background:rgba(250,243,234,.9); backdrop-filter:blur(10px); border-bottom:1px solid var(--line)}
+  nav{display:flex; align-items:center; justify-content:space-between; gap:16px; padding:14px 22px; max-width:var(--maxw); margin:0 auto}
+  nav .links{display:flex; align-items:center; gap:22px}
+  nav .links a{color:var(--cocoa); font-weight:700; font-size:15px}
+  .btn{display:inline-flex; align-items:center; justify-content:center; gap:8px; background:var(--copper); color:#fff !important;
+       border-radius:999px; padding:11px 20px; font-weight:800; font-size:15px; text-decoration:none !important; border:none; cursor:pointer;
+       transition:transform .12s ease, filter .12s ease}
+  .btn:hover{filter:brightness(1.06)}
+  .btn:active{transform:scale(.97)}
+  @media(max-width:720px){ nav .links a:not(.btn){display:none} }
+
+  /* Hero */
+  .hero{padding:64px 0 40px}
+  .hero-grid{display:grid; grid-template-columns:1.05fr .95fr; gap:44px; align-items:center}
+  .eyebrow{display:inline-flex; align-items:center; gap:8px; background:var(--copper-soft); color:var(--copper);
+           border-radius:999px; padding:6px 14px; font-size:13px; font-weight:800; letter-spacing:.4px}
+  h1{font-size:clamp(34px,5vw,54px); line-height:1.1; margin:16px 0 14px; font-weight:900; letter-spacing:-1px}
+  h1 em{font-style:normal; color:var(--copper)}
+  .lead{font-size:18px; color:var(--mute); max-width:30em; margin:0 0 26px}
+  .stores{display:flex; flex-wrap:wrap; gap:12px; align-items:center}
+  .store{display:inline-flex; align-items:center; gap:10px; background:var(--cocoa); color:#fff !important; border-radius:14px;
+         padding:11px 18px; font-weight:700; text-decoration:none !important; transition:transform .12s ease, filter .12s ease}
+  .store:hover{filter:brightness(1.12)}
+  .store:active{transform:scale(.97)}
+  .store small{display:block; font-size:10px; opacity:.75; font-weight:600; line-height:1.1}
+  .store b{display:block; font-size:15px; line-height:1.2}
+  .store.soon{background:var(--panel2); color:var(--mute) !important; cursor:default}
+  .store.soon:hover{filter:none}
+  .hero-shot{display:flex; justify-content:center}
+  .hero-shot img{width:min(300px,80vw); filter:drop-shadow(0 24px 44px rgba(42,31,22,.18))}
+  @media(max-width:860px){ .hero-grid{grid-template-columns:1fr; text-align:center} .lead{margin-inline:auto} .stores{justify-content:center} }
+
+  /* Sections */
+  section{padding:56px 0}
+  .sec-head{text-align:center; max-width:36em; margin:0 auto 36px}
+  h2{font-size:clamp(26px,3.4vw,36px); font-weight:900; margin:0 0 10px; letter-spacing:-.5px}
+  .sec-head p{color:var(--mute); margin:0; font-size:17px}
+
+  /* Features */
+  .features{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px}
+  .card{background:var(--white); border-radius:22px; padding:24px; box-shadow:var(--shadow)}
+  .blob{width:52px; height:52px; display:flex; align-items:center; justify-content:center; margin-bottom:14px;
+        border-radius:44% 56% 56% 44% / 56% 44% 56% 44%; font-size:24px}
+  .card h3{margin:0 0 6px; font-size:19px; font-weight:800}
+  .card p{margin:0; color:var(--mute); font-size:15px}
+
+  /* Screens */
+  .screens{display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:20px}
+  .screens figure{margin:0; text-align:center}
+  .screens img{width:100%; border-radius:20px; box-shadow:var(--shadow)}
+  .screens figcaption{margin-top:10px; font-size:14px; font-weight:700; color:var(--mute)}
+
+  /* Steps */
+  .steps{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px}
+  .step{background:var(--panel2); border-radius:22px; padding:24px; display:flex; gap:14px; align-items:flex-start}
+  .num{flex:none; width:34px; height:34px; border-radius:50%; background:var(--copper); color:#fff;
+       display:flex; align-items:center; justify-content:center; font-weight:900}
+  .step p{margin:0; font-size:15px}
+
+  /* CTA */
+  .cta{background:var(--white); border-radius:28px; padding:44px 28px; text-align:center; box-shadow:var(--shadow)}
+  .cta .stores{justify-content:center; margin-top:20px}
+
+  /* Footer */
+  footer{border-top:1px solid var(--line); margin-top:40px; padding:36px 0 44px; color:var(--mute); font-size:14px}
+  .foot-grid{display:flex; flex-wrap:wrap; gap:24px; justify-content:space-between; align-items:flex-start}
+  .foot-links{display:flex; flex-wrap:wrap; gap:18px}
+  .foot-links a{color:var(--mute); font-weight:700}
+  .socials{display:flex; gap:10px}
+  .socials a{width:40px; height:40px; border-radius:50%; background:var(--white); display:flex; align-items:center;
+             justify-content:center; box-shadow:var(--shadow)}
+  .socials svg{width:19px; height:19px; fill:var(--cocoa)}
+  .socials a:hover svg{fill:var(--copper)}
+  .legal{margin-top:22px; font-size:13px}
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <a href="#top" class="wordmark" style="font-size:22px; color:var(--cocoa)">Sculpt<span>R</span></a>
+    <div class="links">
+      <a href="#features">Features</a>
+      <a href="#screens">Screens</a>
+      <a href="#how">How it works</a>
+      <a href="support.html">Support</a>
+      <a class="btn" href="#get">Get the app</a>
+    </div>
+  </nav>
+</header>
+
+<main id="top">
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <span class="eyebrow">YOUR AI FITNESS COACH</span>
+        <h1>AI training and nutrition that <em>reshapes with you</em></h1>
+        <p class="lead">
+          SculptR builds your workouts and meals around your goal, then tunes them every week as your body changes.
+          Track food, weight, steps and training in one place.
+        </p>
+        <div class="stores" id="hero-stores"></div>
+      </div>
+      <div class="hero-shot">
+        <img src="assets/01-home.png" alt="The SculptR home screen showing daily rings for calories, steps, weigh-in and workout" width="520" height="1130" />
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section id="features">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>Everything you need, in one app</h2>
+        <p>No juggling a tracker, a plan and a coach. SculptR does all three.</p>
+      </div>
+      <div class="features">
+        <div class="card">
+          <div class="blob" style="background:var(--sage)">✨</div>
+          <h3>Adaptive AI</h3>
+          <p>Your plan rewrites itself. Sola reads your weigh-ins and shifts calories and cardio to keep you moving.</p>
+        </div>
+        <div class="card">
+          <div class="blob" style="background:var(--sky)">📋</div>
+          <h3>All-in-one logging</h3>
+          <p>Food, weight, steps and workouts in one place, with a food database covering millions of products.</p>
+        </div>
+        <div class="card">
+          <div class="blob" style="background:var(--peach)">💬</div>
+          <h3>Sola, your AI coach</h3>
+          <p>Ask anything. Sola swaps foods, tweaks your plans and answers form questions in seconds.</p>
+        </div>
+        <div class="card">
+          <div class="blob" style="background:var(--butter)">📸</div>
+          <h3>AI calorie scan</h3>
+          <p>Snap your meal and Sola estimates the calories and macros straight from the photo.</p>
+        </div>
+        <div class="card">
+          <div class="blob" style="background:var(--copper-soft)">◎</div>
+          <h3>Close your rings</h3>
+          <p>Calories, steps, weigh-in and workout. Four simple rings to close every day, with streaks to keep you honest.</p>
+        </div>
+        <div class="card">
+          <div class="blob" style="background:var(--sage)">🏋️</div>
+          <h3>Plans built for you</h3>
+          <p>Workouts around your equipment, goal and injuries. Meals around your diet, allergies and the foods you love.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Screens -->
+  <section id="screens" style="background:var(--panel2)">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>A look inside</h2>
+        <p>Clean, warm and quick to use, on iPhone and Android.</p>
+      </div>
+      <div class="screens">
+        <figure><img src="assets/01-home.png" alt="Home screen with daily rings" loading="lazy" /><figcaption>Daily rings</figcaption></figure>
+        <figure><img src="assets/03-sola.png" alt="Chat with Sola, the AI coach" loading="lazy" /><figcaption>Sola, your coach</figcaption></figure>
+        <figure><img src="assets/02-plans.png" alt="AI generated workout plan" loading="lazy" /><figcaption>Adaptive plans</figcaption></figure>
+        <figure><img src="assets/04-log.png" alt="Logging food, weight and workouts" loading="lazy" /><figcaption>One place to log</figcaption></figure>
+        <figure><img src="assets/05-library.png" alt="Food and exercise library" loading="lazy" /><figcaption>Food and exercises</figcaption></figure>
+        <figure><img src="assets/06-progress.png" alt="Progress and weight trend" loading="lazy" /><figcaption>See progress</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section id="how">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>Getting started takes a minute</h2>
+        <p>Answer a few questions and your first plan is ready.</p>
+      </div>
+      <div class="steps">
+        <div class="step"><div class="num">1</div><p>Tell SculptR your goal, your gear and how you like to train.</p></div>
+        <div class="step"><div class="num">2</div><p>Get an AI workout and meal plan built around your diet and any injuries.</p></div>
+        <div class="step"><div class="num">3</div><p>Log as you go and check in weekly. Sola recalibrates so progress never stalls.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section id="get">
+    <div class="wrap">
+      <div class="cta">
+        <img src="assets/app-icon.png" alt="SculptR app icon" width="76" height="76" style="border-radius:20px" />
+        <h2 style="margin-top:14px">Start reshaping today</h2>
+        <p style="color:var(--mute); margin:0 auto; max-width:32em">
+          Free to download. Log your food, weight and workouts, and meet Sola.
+        </p>
+        <div class="stores" id="cta-stores"></div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="wordmark" style="font-size:24px; color:var(--cocoa)">Sculpt<span>R</span></div>
+        <p style="margin:6px 0 0; max-width:24em">AI training and nutrition that reshapes with you.</p>
+      </div>
+
+      <div class="foot-links">
+        <a href="#features">Features</a>
+        <a href="support.html">Support</a>
+        <a href="privacy-policy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+        <a href="delete-account.html">Delete account</a>
+      </div>
+
+      <div class="socials">
+        <a href="https://www.instagram.com/sculptrapp" target="_blank" rel="noopener" aria-label="SculptR on Instagram">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.2c3.2 0 3.6 0 4.9.07 1.2.05 1.8.25 2.2.42.6.22 1 .48 1.4.9.4.4.7.8.9 1.4.2.4.4 1 .4 2.2.1 1.3.1 1.7.1 4.9s0 3.6-.1 4.9c0 1.2-.2 1.8-.4 2.2-.2.6-.5 1-.9 1.4-.4.4-.8.7-1.4.9-.4.2-1 .4-2.2.4-1.3.1-1.7.1-4.9.1s-3.6 0-4.9-.1c-1.2 0-1.8-.2-2.2-.4-.6-.2-1-.5-1.4-.9-.4-.4-.7-.8-.9-1.4-.2-.4-.4-1-.4-2.2C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.9c0-1.2.2-1.8.4-2.2.2-.6.5-1 .9-1.4.4-.4.8-.7 1.4-.9.4-.2 1-.4 2.2-.4C8.4 2.2 8.8 2.2 12 2.2Zm0 1.8c-3.1 0-3.5 0-4.7.07-.9 0-1.4.2-1.7.3-.4.2-.7.4-1 .7-.3.3-.5.6-.7 1-.1.3-.3.8-.3 1.7C3.5 8.5 3.5 8.9 3.5 12s0 3.5.07 4.7c0 .9.2 1.4.3 1.7.2.4.4.7.7 1 .3.3.6.5 1 .7.3.1.8.3 1.7.3 1.2.07 1.6.07 4.7.07s3.5 0 4.7-.07c.9 0 1.4-.2 1.7-.3.4-.2.7-.4 1-.7.3-.3.5-.6.7-1 .1-.3.3-.8.3-1.7.07-1.2.07-1.6.07-4.7s0-3.5-.07-4.7c0-.9-.2-1.4-.3-1.7-.2-.4-.4-.7-.7-1-.3-.3-.6-.5-1-.7-.3-.1-.8-.3-1.7-.3C15.5 4 15.1 4 12 4Zm0 3.1a4.9 4.9 0 1 1 0 9.8 4.9 4.9 0 0 1 0-9.8Zm0 1.8a3.1 3.1 0 1 0 0 6.2 3.1 3.1 0 0 0 0-6.2Zm5.1-3.3a1.15 1.15 0 1 1 0 2.3 1.15 1.15 0 0 1 0-2.3Z"/></svg>
+        </a>
+        <a href="https://www.tiktok.com/@sculptrapp" target="_blank" rel="noopener" aria-label="SculptR on TikTok">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.6 5.8a4.9 4.9 0 0 1-1.1-3.1h-3v12.2a2.8 2.8 0 1 1-2-2.7V9.1a5.9 5.9 0 1 0 5 5.8V9.3a7.9 7.9 0 0 0 4.6 1.5V7.8a4.9 4.9 0 0 1-3.5-2Z"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="legal">
+      &copy; <span id="yr"></span> SculptR. All rights reserved. &nbsp;·&nbsp;
+      Questions? <a href="mailto:support@sculptr-app.com">support@sculptr-app.com</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  /* ------------------------------------------------------------------
+     STORE LINKS — the only thing you need to edit.
+     Paste the real URL to make a badge live. Leave a value as "" and the
+     badge automatically renders as a non-clickable "Coming soon" instead.
+     ------------------------------------------------------------------ */
+  // Short form (no country code) so Apple redirects each visitor to their own storefront.
+  var APP_STORE_URL   = "https://apps.apple.com/app/id6758404428";
+  var GOOGLE_PLAY_URL = "";   // "https://play.google.com/store/apps/details?id=com.sculptr.app" when Android is live
+
+  function badge(url, small, big) {
+    if (url) {
+      return '<a class="store" href="' + url + '" target="_blank" rel="noopener">' +
+             '<span><small>' + small + '</small><b>' + big + '</b></span></a>';
+    }
+    return '<span class="store soon"><span><small>' + small + '</small><b>Coming soon</b></span></span>';
+  }
+
+  var markup =
+    badge(APP_STORE_URL, "Download on the", "App Store") +
+    badge(GOOGLE_PLAY_URL, "Get it on", "Google Play");
+
+  document.getElementById("hero-stores").innerHTML = markup;
+  document.getElementById("cta-stores").innerHTML = markup;
+  document.getElementById("yr").textContent = new Date().getFullYear();
+</script>
+
+</body>
+</html>

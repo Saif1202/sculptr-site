@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Email confirmed · SculptR</title>
+  <style>
+    :root { --ink:#15181D; --panel:#1E232B; --line:#2D3440; --bone:#EDE7DC; --mute:#8C95A4; --copper:#D08C4A; }
+    * { box-sizing: border-box; }
+    html, body { margin:0; height:100%; }
+    body {
+      background: radial-gradient(120% 90% at 50% 30%, #1E232B 0%, #15181D 100%);
+      color: var(--bone);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      display:flex; align-items:center; justify-content:center; padding:24px; min-height:100vh;
+    }
+    .card {
+      background: var(--panel); border:1px solid var(--line); border-radius:24px;
+      padding:40px 28px; max-width:380px; width:100%; text-align:center;
+      box-shadow:0 20px 50px rgba(0,0,0,0.4);
+    }
+    .check {
+      width:72px; height:72px; border-radius:36px; background:var(--copper);
+      display:flex; align-items:center; justify-content:center; margin:0 auto 20px;
+    }
+    .check svg { width:38px; height:38px; }
+    h1 { font-size:24px; font-style:italic; font-weight:900; margin:0 0 10px; }
+    p { color:var(--mute); font-size:15px; line-height:1.5; margin:0 0 24px; }
+    .btn {
+      display:inline-block; background:var(--copper); color:#1A1410; text-decoration:none;
+      font-weight:800; font-size:16px; padding:14px 28px; border-radius:14px;
+    }
+    .brand { margin-top:22px; color:var(--mute); font-size:12px; }
+    .brand b { color:var(--bone); font-style:italic; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="check">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#1A1410" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 6 9 17 4 12"></polyline>
+      </svg>
+    </div>
+    <h1>Email confirmed</h1>
+    <p>You're all set. Open SculptR and sign in to start sculpting your best body.</p>
+    <a class="btn" href="sculptr://">Open SculptR</a>
+    <div class="brand">Sculpt<b>R</b></div>
+  </div>
+</body>
+</html>
