@@ -31,7 +31,7 @@
 <body>
   <div class="wrap">
     <h1>Sculpt<span>R</span> Privacy Policy</h1>
-    <p class="updated">Last updated: 26 July 2026</p>
+    <p class="updated">Last updated: 15 August 2026</p>
 
     <p>This Privacy Policy explains what personal data the SculptR mobile app ("SculptR", "we", "us", "our")
       collects, how and why we use it, who we share it with, and the rights you have. It is written to meet
@@ -69,6 +69,11 @@
         progress, you may take a photo or choose one from your photo library to include on the share card;
         that image stays on your device and is only passed to your device's share sheet when you tap share.
         We do not upload or store photos you attach to share cards.</li>
+      <li><b>Teams content.</b> If you choose to create or join a team, we store the team name, its join
+        code, your membership, and the display name you use in that team. We also store the summary counters
+        your app publishes to your team (your streak, whether you trained today, and how many workouts you
+        logged this week) and anything you explicitly publish to your team page, together with the likes and
+        comments you leave on other members' posts. See "Teams" below for who can see this.</li>
       <li><b>Subscription data.</b> If you subscribe, your subscription status and an app-generated user
         identifier are processed by our payments partners. We never receive your full payment card details.</li>
     </ul>
@@ -77,9 +82,10 @@
     <p>Under the GDPR we rely on the following legal bases:</p>
     <ul>
       <li><b>Consent</b> (Art. 6(1)(a)) and <b>explicit consent</b> (Art. 9(2)(a)): for processing your
-        health-related and other special-category data to power tracking, plans and coaching. You may
-        withdraw consent at any time by deleting your account or contacting us; this does not affect
-        processing carried out before withdrawal.</li>
+        health-related and other special-category data to power tracking, plans and coaching, and, where you
+        use Teams, for sharing your summary counters and published posts with the other members of your team.
+        You may withdraw consent at any time by leaving a team, deleting your account, or contacting us; this
+        does not affect processing carried out before withdrawal.</li>
       <li><b>Performance of a contract</b> (Art. 6(1)(b)): to create your account, provide the app's
         features you request, and manage your subscription.</li>
       <li><b>Legitimate interests</b> (Art. 6(1)(f)): to keep the service secure, prevent abuse, and
@@ -94,9 +100,40 @@
         sent to our AI provider (<b>Anthropic</b>) through a secure server function. We do not send your
         email address or account identifiers to the AI provider, and it does not use your data to train its
         models under our API terms.</li>
+      <li>To run Teams, if you use it: to show your summary counters and your published posts to the other
+        members of your team, and to show you theirs. See "Teams" below.</li>
       <li>To manage your subscription and restore purchases.</li>
       <li>To secure the service and enforce fair-use limits.</li>
     </ul>
+
+    <h2>Teams (sharing with other users)</h2>
+    <p>Teams is optional and off unless you create or join one. It is the only feature in SculptR that makes
+      any of your information visible to another person. Nothing is shared with anyone until you take a
+      deliberate action, and nothing is ever public: what you share is visible only to the members of the
+      team or teams you belong to, never to other SculptR users, and never on the open internet.</p>
+    <p>Two kinds of information become visible to your teammates:</p>
+    <ul>
+      <li><b>Your summary counters</b>, shown on the team's member list: your display name, your logging
+        streak, whether you trained today, and how many workouts you logged in the last seven days. These
+        update while you are a member of a team.</li>
+      <li><b>What you publish</b>, shown on the team page: a workout, a step count, or a note, each with a
+        short title and an optional description you write yourself, plus the likes and comments you leave on
+        other members' posts. Publishing is always a separate, explicit action; logging something never
+        posts it.</li>
+    </ul>
+    <p>Because a published workout and a training streak can say something about your health, we treat this
+      sharing as processing of special-category data and rely on your <b>explicit consent</b>, given by the
+      act of joining a team and, for each post, by choosing to publish it.</p>
+    <p><b>What teams never expose.</b> Your weight and weigh-in history, your body metrics, your food and
+      calorie logs, your meal and workout plans, your check-in answers, your conversations with the AI coach,
+      and your email address are never readable by other members. This is enforced in the database itself
+      with row-level security, not only in the app: a team grants access to the counters and posts described
+      above and to nothing else.</p>
+    <p><b>Your control.</b> You can delete any post or comment you have made, and the team owner can remove
+      posts from their team's page for moderation. Leaving a team removes you from its member list and stops
+      your counters being shared with it. Deleting your account removes your posts, comments, likes,
+      memberships and counters, and deletes any team you own along with its content. Note that other members
+      may have already seen or copied what you published, which we cannot undo.</p>
 
     <h2>How and where your data is stored</h2>
     <p>Your account and synced data are stored using <b>Supabase</b>, our backend and database provider, over
@@ -121,7 +158,9 @@
       Addendum) and, where applicable, the providers' certification under the EU–US Data Privacy Framework.</p>
 
     <h2>Data retention</h2>
-    <p>We keep your account and associated data for as long as your account is active. When you delete your
+    <p>We keep your account and associated data for as long as your account is active. Team posts, comments
+      and likes are kept until you delete them, until the team is deleted, or until you delete your account,
+      whichever comes first; leaving a team stops your counters being shared with it. When you delete your
       account, we remove it from our live systems immediately and from encrypted backups within 30 days.
       Content sent to our AI provider may be retained by that provider for a limited period (up to around 30
       days) to detect misuse, after which it is deleted. We may keep minimal records where required to
