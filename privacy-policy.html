@@ -68,12 +68,14 @@
         estimate nutrition and is not stored by us afterwards. When you share a meal, workout or your
         progress, you may take a photo or choose one from your photo library to include on the share card;
         that image stays on your device and is only passed to your device's share sheet when you tap share.
-        We do not upload or store photos you attach to share cards.</li>
+        We do not upload or store photos you attach to share cards. Photos and videos you attach to a
+        <b>team post</b> are different: those are uploaded to our storage so your teammates can see them.
+        See "Teams" below.</li>
       <li><b>Teams content.</b> If you choose to create or join a team, we store the team name, its join
         code, your membership, and the display name you use in that team. We also store the summary counters
-        your app publishes to your team (your streak, whether you trained today, and how many workouts you
-        logged this week) and anything you explicitly publish to your team page, together with the likes and
-        comments you leave on other members' posts. See "Teams" below for who can see this.</li>
+        your app publishes to your team (your streak, your steps today, whether you trained today, and how
+        many workouts you logged this week), anything you explicitly publish to your team page including any
+        photos or videos you attach, and the likes and comments you leave on other members' posts. See "Teams" below for who can see this.</li>
       <li><b>Subscription data.</b> If you subscribe, your subscription status and an app-generated user
         identifier are processed by our payments partners. We never receive your full payment card details.</li>
     </ul>
@@ -114,13 +116,25 @@
     <p>Two kinds of information become visible to your teammates:</p>
     <ul>
       <li><b>Your summary counters</b>, shown on the team's member list: your display name, your logging
-        streak, whether you trained today, and how many workouts you logged in the last seven days. These
+        streak, your step count for today, whether you trained today, and how many workouts you logged in
+        the last seven days. These
         update while you are a member of a team.</li>
-      <li><b>What you publish</b>, shown on the team page: a workout, a step count, or a note, each with a
-        short title and an optional description you write yourself, plus the likes and comments you leave on
-        other members' posts. Publishing is always a separate, explicit action; logging something never
-        posts it.</li>
+      <li><b>What you publish</b>, shown on the team page: a workout and the exercises you chose to include,
+        a step count, or a note, each with a short title and an optional description you write yourself, plus
+        up to four photos or videos you attach, and the likes and comments you leave on other members' posts.
+        Publishing is always a separate, explicit action; logging something never posts it.</li>
     </ul>
+    <p><b>Photos and videos on posts.</b> Anything you attach to a team post is uploaded to private storage
+      hosted by Supabase and is served only through short-lived signed links to members of that team.
+      Access is enforced by the storage layer itself, not just by the app. Deleting the post deletes the
+      files with it, and you can delete your own posts at any time. Please do not attach anything you would
+      not want your teammates to keep a copy of, since they can screenshot or save what they can see.</p>
+    <p><b>Reporting and blocking.</b> Because members can put content in front of each other, every post has
+      a report action and every comment can be reported by pressing and holding it, and you can block a
+      member so their posts and comments disappear for you across every team you share. When you report
+      something we record what you reported and why, and it is hidden from you immediately. We review reports
+      and act within 24 hours, which may mean removing the content or removing the member's access. You can
+      also email <a href="mailto:support@sculptr-app.com">support@sculptr-app.com</a>.</p>
     <p>Because a published workout and a training streak can say something about your health, we treat this
       sharing as processing of special-category data and rely on your <b>explicit consent</b>, given by the
       act of joining a team and, for each post, by choosing to publish it.</p>
@@ -142,7 +156,7 @@
 
     <h2>Sub-processors we use</h2>
     <table>
-      <tr><td><b>Supabase</b></td><td>Authentication, database and cloud backup/sync.</td></tr>
+      <tr><td><b>Supabase</b></td><td>Authentication, database, cloud backup/sync, and private storage for photos and videos attached to team posts.</td></tr>
       <tr><td><b>Anthropic</b></td><td>AI model that generates plans, coaching replies and meal-photo estimates.</td></tr>
       <tr><td><b>RevenueCat</b></td><td>Manages subscription entitlements and purchase status.</td></tr>
       <tr><td><b>Apple</b></td><td>Sign in with Apple, Apple Health (opt-in), and App Store payment processing.</td></tr>
@@ -158,7 +172,7 @@
       Addendum) and, where applicable, the providers' certification under the EU–US Data Privacy Framework.</p>
 
     <h2>Data retention</h2>
-    <p>We keep your account and associated data for as long as your account is active. Team posts, comments
+    <p>We keep your account and associated data for as long as your account is active. Team posts, their attached photos and videos, comments
       and likes are kept until you delete them, until the team is deleted, or until you delete your account,
       whichever comes first; leaving a team stops your counters being shared with it. When you delete your
       account, we remove it from our live systems immediately and from encrypted backups within 30 days.
