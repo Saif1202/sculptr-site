@@ -45,6 +45,17 @@ build step and no dependencies beyond Google Fonts.
 - **Scroll position drives everything** on that section: one `0..1` number sets
   the phone's rotation, which screen is showing, the rings, the weight readout
   and the trend line. It is all in the `THE JOURNEY` block of the script.
+- **Light and dark** both come out of one block of custom properties at the top
+  of the stylesheet. The dark values are sampled from the app's own dark theme
+  (`#251F29` ground, `#2F2935` cards, the coral `#F0704B` accent and the four
+  tinted cards), so the site and the app read as the same product. Nothing in the page names a colour directly, so retuning a
+  theme means editing those tokens and nothing else. The dark values are
+  declared twice on purpose: once behind `prefers-color-scheme` for visitors
+  who have never touched the toggle, and once behind `[data-theme="dark"]` for
+  an explicit choice. A small script in `<head>` resolves the theme before the
+  first paint, and the choice is remembered in `localStorage` under
+  `sculptr-theme`. Without JS the toggle is not rendered and the system
+  preference decides.
 - **`prefers-reduced-motion`** swaps the sticky stage for a plain stacked list
   with each screenshot inline, and turns every animation off. Worth checking
   after any change to that section.
