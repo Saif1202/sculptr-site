@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://sculptr-app.com/sitemap.xml
