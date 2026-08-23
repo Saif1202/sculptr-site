@@ -51,6 +51,9 @@
     --bg:#FAF3EA; --surface:#FFFFFF; --surface-2:#F6EEE2; --line:#F0E6D9;
     --ink:#443A33; --mute:#8D8178; --accent:#B87333; --accent-soft:#F3E4D0;
     --accent-text:#B87333; --on-accent:#FFFFFF;
+    /* The R stays brand copper in both themes: it is part of the mark, not an
+       accent that follows the palette. Deliberately not redefined in dark. */
+    --wordmark:#B87333;
     --sage:#DEEEDE; --sage-ink:#57A773; --sky:#DCEAF8; --sky-ink:#6FA3D8;
     --peach:#FFE4D3; --butter:#FBEFC8; --gold:#E0A63C;
 
@@ -141,7 +144,7 @@
 
   .wrap{max-width:var(--maxw); margin:0 auto; padding:0 22px}
   .wordmark{font-family:'Archivo Black',sans-serif; font-style:italic; letter-spacing:-.5px}
-  .wordmark span{color:var(--accent-text)}
+  .wordmark span{color:var(--wordmark)}
 
   h1,h2,h3{letter-spacing:-.5px}
   h1{font-size:clamp(36px,5.4vw,60px); line-height:1.06; margin:16px 0 16px; font-weight:900; letter-spacing:-1.4px}
