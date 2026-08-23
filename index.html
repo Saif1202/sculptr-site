@@ -51,8 +51,8 @@
     --bg:#FAF3EA; --surface:#FFFFFF; --surface-2:#F6EEE2; --line:#F0E6D9;
     --ink:#443A33; --mute:#8D8178; --accent:#B87333; --accent-soft:#F3E4D0;
     --accent-text:#B87333; --on-accent:#FFFFFF;
-    /* The R stays brand copper in both themes: it is part of the mark, not an
-       accent that follows the palette. Deliberately not redefined in dark. */
+    /* The R is the one sacred colour. Brand copper on cream, and copper 300 on
+       plum, which is how the guidelines themselves set the dark lockup. */
     --wordmark:#B87333;
     --sage:#DEEEDE; --sage-ink:#57A773; --sky:#DCEAF8; --sky-ink:#6FA3D8;
     --peach:#FFE4D3; --butter:#FBEFC8; --gold:#E0A63C;
@@ -76,54 +76,56 @@
     --nav-h:64px;
   }
 
-  /* Dark, sampled from the app's own dark theme: a purple leaning charcoal,
-     the coral accent it uses on that ground, and the same four tinted cards.
+  /* Dark, per the brand guidelines: Plum is the dark canvas and copper stays
+     the signature, one ramp step lighter so it holds up on plum. The book is
+     explicit that the UI is never flooded with copper and never goes orange,
+     so the accent is still one moment per surface.
      Declared twice on purpose. The media query serves visitors
      on a dark system with no stored choice (and anyone without JS); the
      attribute serves an explicit pick from the toggle, in either direction. */
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]){
-      --bg:#251F29; --surface:#2F2935; --surface-2:#38323E; --line:#3C3642;
-      --ink:#F5EEE6; --mute:#A49EAA; --accent:#F0704B; --accent-soft:#4A332D;
-      --accent-text:#FFA17B; --on-accent:#FFFFFF;
+      --bg:#221D28; --surface:#2E2832; --surface-2:#38323E; --line:#3C3642;
+      --ink:#F3EBE1; --mute:#B9AEB9; --accent:#DEA862; --accent-soft:#4A332D;
+      --accent-text:#DEA862; --on-accent:#221D28; --wordmark:#DEA862;
       --sage:#2F4338; --sage-ink:#8CC9A0; --sky:#2F3F4F; --sky-ink:#92B0D4;
       --peach:#4A332D; --butter:#443D2B; --gold:#ECC067;
-      --badge-bg:#F5EEE6; --badge-ink:#251F29;
-      --nav-bg:rgba(37,31,41,.82); --nav-bg-stuck:rgba(37,31,41,.94);
-      --band:rgba(47,41,53,.5);
+      --badge-bg:#F3EBE1; --badge-ink:#221D28;
+      --nav-bg:rgba(34,29,40,.82); --nav-bg-stuck:rgba(34,29,40,.94);
+      --band:rgba(46,40,50,.5);
       --edge:rgba(255,255,255,.06);
       --grain:rgba(255,255,255,.05);
       --amb-1:#4A332D; --amb-2:#2F4338; --amb-3:#2F3F4F; --amb-op:.5; --amb-op-3:.4;
-      --halo:rgba(240,112,75,.22);
-      --arc-track:rgba(240,112,75,.16);
+      --halo:rgba(222,168,98,.18);
+      --arc-track:rgba(222,168,98,.16);
       --glare-1:rgba(255,255,255,.16); --glare-2:rgba(255,255,255,.04);
       --phone-shadow:rgba(0,0,0,.55); --phone-shadow-2:rgba(0,0,0,.35);
       --shadow-sm:0 6px 18px rgba(0,0,0,.32);
       --shadow:0 14px 34px rgba(0,0,0,.42);
       --shadow-lg:0 40px 90px rgba(0,0,0,.55);
-      --ring-focus:0 0 0 3px rgba(240,112,75,.45);
+      --ring-focus:0 0 0 3px rgba(222,168,98,.45);
     }
   }
   :root[data-theme="dark"]{
-    --bg:#251F29; --surface:#2F2935; --surface-2:#38323E; --line:#3C3642;
-    --ink:#F5EEE6; --mute:#A49EAA; --accent:#F0704B; --accent-soft:#4A332D;
-    --accent-text:#FFA17B; --on-accent:#FFFFFF;
+    --bg:#221D28; --surface:#2E2832; --surface-2:#38323E; --line:#3C3642;
+    --ink:#F3EBE1; --mute:#B9AEB9; --accent:#DEA862; --accent-soft:#4A332D;
+    --accent-text:#DEA862; --on-accent:#221D28; --wordmark:#DEA862;
     --sage:#2F4338; --sage-ink:#8CC9A0; --sky:#2F3F4F; --sky-ink:#92B0D4;
     --peach:#4A332D; --butter:#443D2B; --gold:#ECC067;
-    --badge-bg:#F5EEE6; --badge-ink:#251F29;
-    --nav-bg:rgba(37,31,41,.82); --nav-bg-stuck:rgba(37,31,41,.94);
-    --band:rgba(47,41,53,.5);
+    --badge-bg:#F3EBE1; --badge-ink:#221D28;
+    --nav-bg:rgba(34,29,40,.82); --nav-bg-stuck:rgba(34,29,40,.94);
+    --band:rgba(46,40,50,.5);
     --edge:rgba(255,255,255,.06);
     --grain:rgba(255,255,255,.05);
     --amb-1:#4A332D; --amb-2:#2F4338; --amb-3:#2F3F4F; --amb-op:.5; --amb-op-3:.4;
-    --halo:rgba(240,112,75,.22);
-    --arc-track:rgba(240,112,75,.16);
+    --halo:rgba(222,168,98,.18);
+    --arc-track:rgba(222,168,98,.16);
     --glare-1:rgba(255,255,255,.16); --glare-2:rgba(255,255,255,.04);
     --phone-shadow:rgba(0,0,0,.55); --phone-shadow-2:rgba(0,0,0,.35);
     --shadow-sm:0 6px 18px rgba(0,0,0,.32);
     --shadow:0 14px 34px rgba(0,0,0,.42);
     --shadow-lg:0 40px 90px rgba(0,0,0,.55);
-    --ring-focus:0 0 0 3px rgba(240,112,75,.45);
+    --ring-focus:0 0 0 3px rgba(222,168,98,.45);
   }
 
   *{box-sizing:border-box}
@@ -1040,7 +1042,7 @@
   function paintTheme(t) {
     root.setAttribute('data-theme', t);
     themeBtn.setAttribute('aria-label', t === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
-    if (themeMeta) themeMeta.setAttribute('content', t === 'dark' ? '#251F29' : '#FAF3EA');
+    if (themeMeta) themeMeta.setAttribute('content', t === 'dark' ? '#221D28' : '#FAF3EA');
   }
   paintTheme(root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light');
 

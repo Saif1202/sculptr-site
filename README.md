@@ -46,9 +46,11 @@ build step and no dependencies beyond Google Fonts.
   the phone's rotation, which screen is showing, the rings, the weight readout
   and the trend line. It is all in the `THE JOURNEY` block of the script.
 - **Light and dark** both come out of one block of custom properties at the top
-  of the stylesheet. The dark values are sampled from the app's own dark theme
-  (`#251F29` ground, `#2F2935` cards, the coral `#F0704B` accent and the four
-  tinted cards), so the site and the app read as the same product. Nothing in the page names a colour directly, so retuning a
+  of the stylesheet. The dark values follow the brand book: Plum
+  (`#221D28`) as the dark canvas, `#2E2832` cards, and copper 300 (`#DEA862`)
+  as the accent, one ramp step lighter so the signature holds up on plum. The
+  book is explicit that the UI is never flooded with copper and never goes
+  orange, so the accent stays one moment per surface in both themes. Nothing in the page names a colour directly, so retuning a
   theme means editing those tokens and nothing else. The dark values are
   declared twice on purpose: once behind `prefers-color-scheme` for visitors
   who have never touched the toggle, and once behind `[data-theme="dark"]` for
