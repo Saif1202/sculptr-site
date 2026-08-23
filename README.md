@@ -24,12 +24,13 @@ The legal pages must stay on this domain: the app hardcodes
 Open `index.html` and edit the two lines near the bottom:
 
 ```js
-var APP_STORE_URL   = "";   // "https://apps.apple.com/gb/app/sculptr/id0000000000"
-var GOOGLE_PLAY_URL = "";   // "https://play.google.com/store/apps/details?id=com.sculptr.app"
+var APP_STORE_URL   = "https://apps.apple.com/app/id6758404428";
+var GOOGLE_PLAY_URL = "https://play.google.com/store/apps/details?id=com.sculptr.app";
 ```
 
 A filled URL renders a live badge. An empty one renders a non-clickable
-"Coming soon", so Android can stay pending until it goes live.
+"Coming soon", so a store can stay pending until it goes live. Both are
+live now, so both badges are clickable.
 
 ## Deploy to GitHub Pages
 
