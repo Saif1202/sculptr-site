@@ -34,14 +34,14 @@ live now, so both badges are clickable.
 
 ## Editing the landing page
 
-`index.html` is the whole thing — markup, styles and script in one file, no
+`index.html` is the whole thing: markup, styles and script in one file, no
 build step and no dependencies beyond Google Fonts.
 
 - **The journey section** is six `<article class="beat">` blocks. Each one
   carries its copy and a `data-shot` index pointing at one of the screenshots
   stacked inside the phone. Add or remove a beat and the scroll length, the
-  rail buttons (`RAIL_LABELS` in the script) and the crossfades follow along —
-  just keep the two lists the same length.
+  rail buttons (`RAIL_LABELS` in the script) and the crossfades follow along.
+  Just keep the two lists the same length.
 - **Scroll position drives everything** on that section: one `0..1` number sets
   the phone's rotation, which screen is showing, the rings, the weight readout
   and the trend line. It is all in the `THE JOURNEY` block of the script.

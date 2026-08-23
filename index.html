@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>SculptR — AI training and nutrition that reshapes with you</title>
+<title>SculptR | AI training and nutrition that reshapes with you</title>
 <meta name="description" content="SculptR is your AI fitness coach. Adaptive workout and meal plans, all-in-one logging, AI calorie scanning from a photo, and daily rings to close. Free to start." />
 <link rel="canonical" href="https://sculptr-app.com/" />
 <link rel="icon" href="assets/favicon.png" />
@@ -11,7 +11,7 @@
 <!-- Open Graph / social preview -->
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://sculptr-app.com/" />
-<meta property="og:title" content="SculptR — AI training and nutrition that reshapes with you" />
+<meta property="og:title" content="SculptR | AI training and nutrition that reshapes with you" />
 <meta property="og:description" content="Adaptive AI plans, all-in-one logging, and an AI coach that tunes your plan each week." />
 <meta property="og:image" content="https://sculptr-app.com/assets/app-icon.png" />
 <meta name="twitter:card" content="summary_large_image" />
@@ -32,7 +32,7 @@
 
 <style>
   /* ==================================================================
-     Playful Wellness palette — same tokens the app ships with.
+     Playful Wellness palette, the same tokens the app ships with.
      Everything below is built from these; nothing hardcodes a colour.
      ================================================================== */
   :root{
@@ -191,7 +191,7 @@
 
   /* ---------------- Journey (scroll-driven) ---------------- */
   .journey{background:linear-gradient(180deg, transparent, rgba(246,238,226,.75) 10%, rgba(246,238,226,.75) 90%, transparent); padding:56px 0 0}
-  .journey-track{position:relative; height:calc(100vh + 5 * 82vh); height:calc(100svh + 5 * 82svh)}
+  .journey-track{position:relative; height:calc(100vh + 7 * 76vh); height:calc(100svh + 7 * 76svh)}
   .journey-stage{position:sticky; top:0; height:100vh; height:100svh; display:flex; flex-direction:column;
                  justify-content:center; overflow:hidden; padding-top:var(--nav-h)}
   /* --fit is set by JS: on a viewport too short for the stage, the whole block
@@ -305,7 +305,7 @@
     .chip b{font-size:13px}
   }
 
-  /* Stacked and short — a small laptop or a phone in landscape. */
+  /* Stacked and short: a small laptop or a phone in landscape. */
   @media(max-width:1000px) and (max-height:820px){
     .journey .phone{width:min(120px,30vw,15svh)}
     .beats{min-height:168px}
@@ -317,6 +317,27 @@
     .journey .phone{width:min(104px,26vw,13svh)}
     .hud, .journey-note{display:none}
     .beat p{font-size:14px}
+  }
+
+  /* ---------------- Team ---------------- */
+  .team-grid{display:grid; grid-template-columns:1fr 1.02fr; gap:44px; align-items:center}
+  .team-points{list-style:none; margin:0; padding:0; display:grid; gap:22px}
+  .team-points li{display:flex; gap:15px; align-items:flex-start}
+  .team-points .ic{width:46px; height:46px; flex:none; display:grid; place-items:center; font-size:21px;
+                   border-radius:44% 56% 56% 44% / 56% 44% 56% 44%}
+  .team-points b{display:block; font-size:17.5px; font-weight:800}
+  .team-points p{margin:3px 0 0; color:var(--mute); font-size:15px}
+  .team-note{background:var(--white); border:1px solid var(--line); border-radius:22px; padding:16px;
+             box-shadow:var(--shadow-sm)}
+  .team-shots{position:relative; display:flex; justify-content:center; align-items:center; min-height:min(560px,84vw)}
+  /* Two phones turned towards each other, tracking the pointer with the hero. */
+  .team-shots .phone{position:absolute; width:min(230px,44vw)}
+  .team-shots .a{transform:translateX(-52%) rotate(-4deg) rotateY(calc(10deg + var(--mx,0) * 5deg)) rotateX(calc(var(--my,0) * -3deg))}
+  .team-shots .b{transform:translateX(52%) rotate(4deg) rotateY(calc(-10deg + var(--mx,0) * 5deg)) rotateX(calc(var(--my,0) * -3deg)); z-index:2}
+  @media(max-width:900px){
+    .team-grid{grid-template-columns:1fr; gap:30px}
+    .team-shots{order:-1; min-height:min(440px,96vw)}
+    .team-shots .phone{width:min(184px,40vw)}
   }
 
   /* ---------------- Features ---------------- */
@@ -407,7 +428,8 @@
   <nav>
     <a href="#top" class="wordmark" style="font-size:22px; color:var(--cocoa)">Sculpt<span>R</span></a>
     <div class="links">
-      <a href="#journey">The journey</a>
+      <a href="#journey">Your Journey</a>
+      <a href="#team">Teams</a>
       <a href="#features">Features</a>
       <a href="#screens">Screens</a>
       <a href="support.html">Support</a>
@@ -442,7 +464,7 @@
         <div class="bob">
           <div class="phone" id="hero-phone">
             <img class="screen" src="assets/01-home.png" width="520" height="1018" fetchpriority="high"
-                 alt="The SculptR home screen showing daily rings for calories, steps, weigh-in and workout" />
+                 alt="The SculptR home screen showing daily rings for calories, steps, weight and workout" />
             <span class="glare" aria-hidden="true"></span>
           </div>
         </div>
@@ -461,15 +483,15 @@
             <span><small>Sola</small><b>Plan updated for week 4</b></span>
           </div>
           <div class="chip" data-d="1.3" style="--z:40px; right:6%; bottom:9%">
-            <span class="ic" style="background:var(--sky)">◎</span>
-            <span><small>Today</small><b>Rings 4/4 closed</b></span>
+            <span class="ic" style="background:var(--sky)">👟</span>
+            <span><small>Team steps today</small><b>You lead with 17,197</b></span>
           </div>
         </div>
       </div>
     </div>
 
     <a class="cue" href="#journey">
-      <span>See a 12-week journey</span>
+      <span>See how the app works</span>
       <i aria-hidden="true"></i>
     </a>
   </section>
@@ -477,11 +499,11 @@
   <!-- ============================ JOURNEY ============================ -->
   <!-- One sticky stage, six beats. Scroll position drives the phone's rotation,
        which screenshot is showing, the rings, the weight readout and the trend line. -->
-  <section id="journey" class="journey" aria-label="How the app works over twelve weeks">
+  <section id="journey" class="journey" aria-label="A walk through the app, screen by screen">
     <div class="wrap">
       <div class="sec-head reveal">
-        <h2>Watch a plan take shape</h2>
-        <p>Scroll through twelve weeks with SculptR — from your first day to a body that moved.</p>
+        <h2>Your journey, screen by screen</h2>
+        <p>Scroll through the whole app, from the questions you answer first to the plan that keeps retuning itself.</p>
       </div>
     </div>
 
@@ -493,49 +515,65 @@
 
           <div class="beats" id="beats">
             <article class="beat" data-shot="0">
-              <span class="kicker"><i>1</i> Day 1 · Setup</span>
-              <h3>Answer a few questions. That's the whole setup.</h3>
-              <p>Your goal, your gear, how you like to train and what you won't eat. Home opens with four rings waiting to be closed.</p>
+              <span class="kicker"><i>1</i> Setup</span>
+              <h3>Answer a few questions. That is the whole setup.</h3>
+              <p>Your goal, your gear, how you like to train and what you will not eat. Home opens with four rings waiting to be closed.</p>
               <ul><li>Goal set</li><li>Rings 0/4</li><li>Streak starts today</li></ul>
               <img class="beat-shot" src="assets/01-home.png" alt="Home screen with four daily rings" loading="lazy" />
             </article>
 
             <article class="beat" data-shot="1">
-              <span class="kicker"><i>2</i> Day 1 · Your plan</span>
-              <h3>Your training and meals are written while you wait.</h3>
-              <p>Sessions built around the equipment you actually have, meals around the food you actually eat — and nothing that touches an old injury.</p>
-              <ul><li>Around your gear</li><li>Around your diet</li><li>Injury-aware</li></ul>
+              <span class="kicker"><i>2</i> Your training</span>
+              <h3>Your training is written while you wait.</h3>
+              <p>Sessions built around the equipment you actually have, the days you can train, and nothing that aggravates an old injury.</p>
+              <ul><li>Around your gear</li><li>Works with injuries</li><li>Swap any session</li></ul>
               <img class="beat-shot" src="assets/02-plans.png" alt="An AI generated workout plan" loading="lazy" />
             </article>
 
+            <article class="beat" data-shot="2">
+              <span class="kicker"><i>3</i> Your meals</span>
+              <h3>A meal blueprint to match, and a day to check in.</h3>
+              <p>Calories and macros set for your goal, built from food you actually eat. Pick a day each week to tell Sola how it went, and she tunes the plan only if it needs it.</p>
+              <ul><li>2160 kcal a day</li><li>Protein first</li><li>Check in weekly</li></ul>
+              <img class="beat-shot" src="assets/07-meals.png" alt="The meal blueprint and weekly check in" loading="lazy" />
+            </article>
+
             <article class="beat" data-shot="3">
-              <span class="kicker"><i>3</i> Week 1 · Logging</span>
+              <span class="kicker"><i>4</i> Logging</span>
               <h3>Logging a day takes about thirty seconds.</h3>
               <p>Scan a barcode, search millions of foods, or snap the plate and let Sola read the calories and macros off the photo.</p>
-              <ul><li>Barcode + database</li><li>AI photo scan</li><li>Weight and steps</li></ul>
+              <ul><li>Barcode and database</li><li>AI photo scan</li><li>Weight and steps</li></ul>
               <img class="beat-shot" src="assets/04-log.png" alt="Logging food, weight and workouts" loading="lazy" />
             </article>
 
-            <article class="beat" data-shot="2">
-              <span class="kicker"><i>4</i> Week 3 · Sola</span>
+            <article class="beat" data-shot="4">
+              <span class="kicker"><i>5</i> Sola, your coach</span>
               <h3>Ask anything, at the moment you need it.</h3>
               <p>Allergic to oats? Gym busy? Not sure the form is right? Sola swaps the food, rewrites the session and answers in seconds.</p>
               <ul><li>Food swaps</li><li>Form checks</li><li>Plan tweaks</li></ul>
               <img class="beat-shot" src="assets/03-sola.png" alt="Chatting with Sola, the AI coach" loading="lazy" />
             </article>
 
-            <article class="beat" data-shot="4">
-              <span class="kicker"><i>5</i> Week 6 · Momentum</span>
-              <h3>Swap out anything you don't love.</h3>
-              <p>A library of foods and exercises sits behind every plan, so a meal you're bored of or a movement you can't do is one tap from being replaced.</p>
-              <ul><li>Millions of foods</li><li>Exercise library</li><li>One-tap swaps</li></ul>
-              <img class="beat-shot" src="assets/05-library.png" alt="The food and exercise library" loading="lazy" />
+            <article class="beat" data-shot="5">
+              <span class="kicker"><i>6</i> Your team</span>
+              <h3>Bring your people. It is easier with company.</h3>
+              <p>Share the session you just finished with photos or a video, tag whoever trained with you, and let the step race run all day.</p>
+              <ul><li>Up to 20 in a team</li><li>Photos and video</li><li>Likes and comments</li></ul>
+              <img class="beat-shot" src="assets/10-team-activity.png" alt="A team feed with a shared workout" loading="lazy" />
             </article>
 
-            <article class="beat" data-shot="5">
-              <span class="kicker"><i>6</i> Week 12 · Progress</span>
-              <h3>The plan reshaped every week. So did you.</h3>
-              <p>Weigh-ins feed straight back into your calories and cardio, so the plan you finish on is nothing like the one you started with.</p>
+            <article class="beat" data-shot="6">
+              <span class="kicker"><i>7</i> Recovery</span>
+              <h3>See what is fresh and what still needs a day.</h3>
+              <p>Every session you log paints your muscle map, so you know which groups have recovered before you pick tomorrow&rsquo;s training.</p>
+              <ul><li>Ten muscle groups</li><li>Recovery at a glance</li><li>Your week in numbers</li></ul>
+              <img class="beat-shot" src="assets/08-body.png" alt="The muscle recovery map" loading="lazy" />
+            </article>
+
+            <article class="beat" data-shot="7">
+              <span class="kicker"><i>8</i> Progress</span>
+              <h3>The plan keeps up with you.</h3>
+              <p>Your weight and your check in feed straight back into your calories and your cardio, so the plan never sits still while your body is changing.</p>
               <ul><li>Weekly recalibration</li><li>Trend, not daily noise</li><li>Streak intact</li></ul>
               <img class="beat-shot" src="assets/06-progress.png" alt="Progress screen with weight trend" loading="lazy" />
             </article>
@@ -557,9 +595,11 @@
               <div class="screen-stack" id="screen-stack">
                 <img class="screen" src="assets/01-home.png" width="520" height="1018" alt="Home screen with daily rings" />
                 <img class="screen" src="assets/02-plans.png" width="520" height="1018" alt="AI generated workout plan" loading="lazy" />
-                <img class="screen" src="assets/03-sola.png" width="520" height="1018" alt="Chatting with Sola" loading="lazy" />
+                <img class="screen" src="assets/07-meals.png" width="520" height="1018" alt="Meal blueprint and weekly check in" loading="lazy" />
                 <img class="screen" src="assets/04-log.png" width="520" height="1018" alt="Logging food and workouts" loading="lazy" />
-                <img class="screen" src="assets/05-library.png" width="520" height="1018" alt="Food and exercise library" loading="lazy" />
+                <img class="screen" src="assets/03-sola.png" width="520" height="1018" alt="Chatting with Sola" loading="lazy" />
+                <img class="screen" src="assets/10-team-activity.png" width="520" height="1018" alt="Team activity feed" loading="lazy" />
+                <img class="screen" src="assets/08-body.png" width="520" height="1018" alt="Muscle recovery map" loading="lazy" />
                 <img class="screen" src="assets/06-progress.png" width="520" height="1018" alt="Progress and weight trend" loading="lazy" />
               </div>
               <span class="glare" aria-hidden="true"></span>
@@ -583,16 +623,16 @@
                 <div class="ring-key">
                   <span><i style="background:#B87333"></i> Calories</span>
                   <span><i style="background:#57A773"></i> Steps</span>
-                  <span><i style="background:#6FA3D8"></i> Weigh-in</span>
+                  <span><i style="background:#6FA3D8"></i> Weight</span>
                   <span><i style="background:#E0A63C"></i> Workout</span>
                 </div>
               </div>
             </div>
 
             <div class="hud-card">
-              <div class="hud-title">Weight trend</div>
+              <div class="hud-title">Your trend</div>
               <div class="readout"><b id="kg">84.0</b><small>kg</small></div>
-              <div class="delta"><span id="sculpted">0</span>% sculpted · <span id="streak">0</span> day streak</div>
+              <div class="delta" id="delta">The trend, not the daily noise</div>
               <svg class="spark" viewBox="0 0 200 56">
                 <path class="area" id="spark-area" d="" />
                 <path id="spark-line" d="" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100" />
@@ -603,7 +643,63 @@
         </div>
 
         <div class="rail" id="rail" aria-label="Jump to a stage of the journey"></div>
-        <p class="journey-note">Figures shown are the app's example data. Your plan, and your pace, are your own.</p>
+        <p class="journey-note">Screens and figures are the app&rsquo;s own example data.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ TEAM ============================ -->
+  <section id="team">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <h2>Nobody sticks at it alone</h2>
+        <p>Start a team with up to twenty people. Share the sessions you actually finished, and let the step count settle who wins the day.</p>
+      </div>
+
+      <div class="team-grid">
+        <ul class="team-points">
+          <li class="reveal" style="--i:0">
+            <span class="ic" style="background:var(--sage)">👟</span>
+            <div>
+              <b>A step race that resets every night</b>
+              <p>Everyone on the team, ranked by today&rsquo;s steps, updating as you walk. Enough to get you off the sofa at half nine.</p>
+            </div>
+          </li>
+          <li class="reveal" style="--i:1">
+            <span class="ic" style="background:var(--peach)">📸</span>
+            <div>
+              <b>Sessions worth showing</b>
+              <p>Post the workout you just finished with photos or a video, and tag whoever was there lifting with you.</p>
+            </div>
+          </li>
+          <li class="reveal" style="--i:2">
+            <span class="ic" style="background:var(--butter)">❤️</span>
+            <div>
+              <b>Somebody notices</b>
+              <p>Likes and comments on every post, so a good week gets celebrated and a quiet one gets a nudge.</p>
+            </div>
+          </li>
+          <li class="reveal team-note" style="--i:3">
+            <span class="ic" style="background:var(--sky)">🔒</span>
+            <div>
+              <b>Your numbers stay yours</b>
+              <p>Only your step count is shared with the team. Your weight, your meals and your plan are never part of it.</p>
+            </div>
+          </li>
+        </ul>
+
+        <div class="team-shots stage3d tilt-root reveal">
+          <div class="phone a">
+            <img class="screen" src="assets/09-team-steps.png" width="520" height="1018"
+                 alt="The team step leaderboard for the day" loading="lazy" />
+            <span class="glare" aria-hidden="true"></span>
+          </div>
+          <div class="phone b">
+            <img class="screen" src="assets/10-team-activity.png" width="520" height="1018"
+                 alt="The team feed, with a shared push day and photos from the gym" loading="lazy" />
+            <span class="glare" aria-hidden="true"></span>
+          </div>
         </div>
       </div>
     </div>
@@ -620,12 +716,12 @@
         <div class="card reveal" style="--i:0">
           <div class="blob" style="background:var(--sage)">✨</div>
           <h3>Adaptive AI</h3>
-          <p>Your plan rewrites itself. Sola reads your weigh-ins and shifts calories and cardio to keep you moving.</p>
+          <p>Your plan rewrites itself. Sola reads your weekly weight and shifts calories and cardio to keep you moving.</p>
         </div>
         <div class="card reveal" style="--i:1">
           <div class="blob" style="background:var(--sky)">📋</div>
-          <h3>All-in-one logging</h3>
-          <p>Food, weight, steps and workouts in one place, with a food database covering millions of products.</p>
+          <h3>One place to log</h3>
+          <p>Food, weight, steps and workouts all in the same app, with a food database covering millions of products.</p>
         </div>
         <div class="card reveal" style="--i:2">
           <div class="blob" style="background:var(--peach)">💬</div>
@@ -640,12 +736,27 @@
         <div class="card reveal" style="--i:4">
           <div class="blob" style="background:var(--copper-soft)">◎</div>
           <h3>Close your rings</h3>
-          <p>Calories, steps, weigh-in and workout. Four simple rings to close every day, with streaks to keep you honest.</p>
+          <p>Calories, steps, weight and workout. Four simple rings to close every day, with streaks to keep you honest.</p>
         </div>
         <div class="card reveal" style="--i:5">
           <div class="blob" style="background:var(--sage)">🏋️</div>
           <h3>Plans built for you</h3>
           <p>Workouts around your equipment, goal and injuries. Meals around your diet, allergies and the foods you love.</p>
+        </div>
+        <div class="card reveal" style="--i:6">
+          <div class="blob" style="background:var(--sky)">👟</div>
+          <h3>Train with your team</h3>
+          <p>Up to twenty people, a step race that resets every night, and a feed for the sessions you actually finished.</p>
+        </div>
+        <div class="card reveal" style="--i:7">
+          <div class="blob" style="background:var(--sage)">🫀</div>
+          <h3>Your recovery map</h3>
+          <p>Every session you log paints your muscle map, so you can see what is fresh and what wants another day.</p>
+        </div>
+        <div class="card reveal" style="--i:8">
+          <div class="blob" style="background:var(--butter)">📋</div>
+          <h3>A weekly check in</h3>
+          <p>Pick a day. Tell Sola how the week felt. She reads your weight and retunes the plan, only if it needs it.</p>
         </div>
       </div>
     </div>
@@ -662,10 +773,14 @@
 
     <div class="deck-wrap">
       <div class="deck" id="deck" tabindex="0" role="group" aria-label="App screenshots, draggable">
-        <figure><img src="assets/01-home.png" alt="Home screen with daily rings" loading="lazy" /><figcaption>Daily rings</figcaption></figure>
-        <figure><img src="assets/03-sola.png" alt="Chat with Sola, the AI coach" loading="lazy" /><figcaption>Sola, your coach</figcaption></figure>
+        <figure><img src="assets/11-today.png" alt="Today: weight gauge, calories, steps and macros" loading="lazy" /><figcaption>Your day</figcaption></figure>
+        <figure><img src="assets/07-meals.png" alt="Meal blueprint and weekly check in" loading="lazy" /><figcaption>Meal blueprint</figcaption></figure>
         <figure><img src="assets/02-plans.png" alt="AI generated workout plan" loading="lazy" /><figcaption>Adaptive plans</figcaption></figure>
+        <figure><img src="assets/03-sola.png" alt="Chat with Sola, the AI coach" loading="lazy" /><figcaption>Sola, your coach</figcaption></figure>
         <figure><img src="assets/04-log.png" alt="Logging food, weight and workouts" loading="lazy" /><figcaption>One place to log</figcaption></figure>
+        <figure><img src="assets/08-body.png" alt="Muscle recovery map and the week in numbers" loading="lazy" /><figcaption>Recovery map</figcaption></figure>
+        <figure><img src="assets/09-team-steps.png" alt="Team step leaderboard" loading="lazy" /><figcaption>Team step race</figcaption></figure>
+        <figure><img src="assets/10-team-activity.png" alt="Team activity feed" loading="lazy" /><figcaption>Team feed</figcaption></figure>
         <figure><img src="assets/05-library.png" alt="Food and exercise library" loading="lazy" /><figcaption>Food and exercises</figcaption></figure>
         <figure><img src="assets/06-progress.png" alt="Progress and weight trend" loading="lazy" /><figcaption>See progress</figcaption></figure>
       </div>
@@ -717,6 +832,7 @@
 
       <div class="foot-links">
         <a href="#features">Features</a>
+        <a href="#team">Teams</a>
         <a href="support.html">Support</a>
         <a href="privacy-policy.html">Privacy</a>
         <a href="terms.html">Terms</a>
@@ -745,7 +861,7 @@
   'use strict';
 
   /* ==================================================================
-     STORE LINKS — the only thing you need to edit.
+     STORE LINKS. The only thing you need to edit.
      Paste the real URL to make a badge live. Leave a value as "" and the
      badge automatically renders as a non-clickable "Coming soon" instead.
      ================================================================== */
@@ -869,7 +985,7 @@
   var screens = [].slice.call(document.querySelectorAll('#screen-stack img'));
   var journeyPhone = document.getElementById('journey-phone');
   var rail = document.getElementById('rail');
-  var RAIL_LABELS = ['Day 1', 'Your plan', 'Week 1', 'Week 3', 'Week 6', 'Week 12'];
+  var RAIL_LABELS = ['Setup', 'Training', 'Meals', 'Logging', 'Sola', 'Team', 'Recovery', 'Progress'];
   var N = beats.length;
 
   if (!reduce && track) {
@@ -906,11 +1022,9 @@
     var rings = [0, 1, 2, 3].map(function (i) { return document.getElementById('r' + i); });
     var arc = document.getElementById('arc-fill');
     var kgEl = document.getElementById('kg');
-    var sculptedEl = document.getElementById('sculpted');
-    var streakEl = document.getElementById('streak');
 
     // The beats sit on top of each other, so the box needs to be as tall as the
-    // tallest one — measured, not guessed, or long copy spills over the HUD.
+    // tallest one, measured rather than guessed, or long copy spills over the HUD.
     var beatsBox = document.getElementById('beats');
     function sizeBeats() {
       beatsBox.style.height = 'auto';
@@ -954,7 +1068,7 @@
 
       for (var k = 0; k < N; k++) {
         var dist = Math.abs(pos - k);
-        // Copy hands over cleanly — two blocks of text never sit on top of each other.
+        // Copy hands over cleanly, so two blocks of text never sit on top of each other.
         var tText = smooth(clamp((0.5 - dist) / 0.10, 0, 1));
         beats[k].style.opacity = tText;
         beats[k].style.transform = 'translateY(' + ((1 - tText) * 16).toFixed(1) + 'px) scale(' + (0.985 + tText * 0.015).toFixed(3) + ')';
@@ -984,10 +1098,8 @@
         rings[r].setAttribute('stroke-dashoffset', (100 - 100 * clamp(p * 1.25 - r * 0.06, 0, 1)).toFixed(2));
       }
 
-      var e = smooth(p);
-      kgEl.textContent = (84.0 - 5.6 * e).toFixed(1);
-      sculptedEl.textContent = Math.round(64 * e);
-      streakEl.textContent = Math.round(84 * p);
+      // The readout tracks the line being drawn beside it, nothing more.
+      kgEl.textContent = (84.0 - 5.6 * smooth(p)).toFixed(1);
 
       line.setAttribute('stroke-dashoffset', (100 - 100 * p).toFixed(2));
       area.style.opacity = p.toFixed(2);
@@ -1010,7 +1122,7 @@
   }
 
   /* ==================================================================
-     SCREENS DECK — a draggable coverflow. Native scrolling does the work;
+     SCREENS DECK. A draggable coverflow: native scrolling does the work,
      the transforms are just painted on top of wherever it lands.
      ================================================================== */
   var deck = document.getElementById('deck');
