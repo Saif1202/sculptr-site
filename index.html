@@ -15,186 +15,634 @@
 <meta property="og:description" content="Adaptive AI plans, all-in-one logging, and an AI coach that tunes your plan each week." />
 <meta property="og:image" content="https://sculptr-app.com/assets/app-icon.png" />
 <meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#FAF3EA" />
+
+<!-- Set before first paint so the CSS can hide anything JS is going to animate in.
+     Without JS every one of those elements stays visible and the page still reads. -->
+<script>
+  document.documentElement.classList.add('js');
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.documentElement.classList.add('reduce');
+  }
+</script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;0,800;0,900&family=Archivo+Black&display=swap" rel="stylesheet" />
 
 <style>
-  /* Playful Wellness palette, matching the app */
+  /* ==================================================================
+     Playful Wellness palette — same tokens the app ships with.
+     Everything below is built from these; nothing hardcodes a colour.
+     ================================================================== */
   :root{
     --cream:#FAF3EA; --white:#FFFFFF; --panel2:#F6EEE2; --line:#F0E6D9;
     --cocoa:#443A33; --mute:#8D8178; --copper:#B87333; --copper-soft:#F3E4D0;
     --sage:#DEEEDE; --sage-ink:#57A773; --sky:#DCEAF8; --sky-ink:#6FA3D8;
     --peach:#FFE4D3; --butter:#FBEFC8; --gold:#E0A63C;
-    --shadow:0 10px 30px rgba(42,31,22,.08);
-    --maxw:1100px;
+
+    --shadow-sm:0 6px 18px rgba(42,31,22,.06);
+    --shadow:0 12px 34px rgba(42,31,22,.09);
+    --shadow-lg:0 40px 90px rgba(42,31,22,.20);
+    --ring-focus:0 0 0 3px rgba(184,115,51,.35);
+    --maxw:1140px;
+    --nav-h:64px;
   }
+
   *{box-sizing:border-box}
-  html{scroll-behavior:smooth}
+  html{scroll-behavior:smooth; scroll-padding-top:calc(var(--nav-h) + 12px)}
+  html.reduce{scroll-behavior:auto}
+
   body{
     margin:0; background:var(--cream); color:var(--cocoa);
     font-family:'Nunito',system-ui,-apple-system,'Segoe UI',sans-serif;
     font-weight:600; line-height:1.6; -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
   }
+
   a{color:var(--copper); text-decoration:none}
   a:hover{text-decoration:underline}
+  :focus-visible{outline:none; box-shadow:var(--ring-focus); border-radius:12px}
+  img{max-width:100%}
+
   .wrap{max-width:var(--maxw); margin:0 auto; padding:0 22px}
   .wordmark{font-family:'Archivo Black',sans-serif; font-style:italic; letter-spacing:-.5px}
   .wordmark span{color:var(--copper)}
 
-  /* Nav */
-  header{position:sticky; top:0; z-index:50; background:rgba(250,243,234,.9); backdrop-filter:blur(10px); border-bottom:1px solid var(--line)}
-  nav{display:flex; align-items:center; justify-content:space-between; gap:16px; padding:14px 22px; max-width:var(--maxw); margin:0 auto}
-  nav .links{display:flex; align-items:center; gap:22px}
-  nav .links a{color:var(--cocoa); font-weight:700; font-size:15px}
+  h1,h2,h3{letter-spacing:-.5px}
+  h1{font-size:clamp(36px,5.4vw,60px); line-height:1.06; margin:16px 0 16px; font-weight:900; letter-spacing:-1.4px}
+  h1 em{font-style:normal; color:var(--copper)}
+  h2{font-size:clamp(28px,3.6vw,40px); font-weight:900; margin:0 0 10px}
+  .lead{font-size:18px; color:var(--mute); max-width:31em; margin:0 0 28px}
+
+  .eyebrow{display:inline-flex; align-items:center; gap:8px; background:var(--copper-soft); color:var(--copper);
+           border-radius:999px; padding:7px 15px; font-size:13px; font-weight:800; letter-spacing:.4px; text-transform:uppercase}
+  .eyebrow .dot{width:7px; height:7px; border-radius:50%; background:var(--copper)}
+  html:not(.reduce) .eyebrow .dot{animation:pulse 2.4s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1; transform:scale(1)} 50%{opacity:.45; transform:scale(.72)}}
+
+  /* ---------------- Ambient background: soft brand blobs + grain ------------- */
+  .ambient{position:fixed; inset:0; z-index:-1; overflow:hidden; pointer-events:none}
+  .ambient i{position:absolute; display:block; border-radius:50%; filter:blur(70px); opacity:.62}
+  .ambient .a1{width:46vw; height:46vw; left:-14vw; top:-10vw; background:var(--peach)}
+  .ambient .a2{width:38vw; height:38vw; right:-12vw; top:18vh; background:var(--sage)}
+  .ambient .a3{width:42vw; height:42vw; left:16vw; bottom:-18vw; background:var(--sky); opacity:.45}
+  .ambient .grain{position:absolute; inset:-50%; opacity:.24; background-image:
+      radial-gradient(rgba(68,58,51,.16) 1px, transparent 1px);
+    background-size:3px 3px}
+
+  /* ---------------- Nav ---------------- */
+  header{position:sticky; top:0; z-index:60; background:rgba(250,243,234,.82);
+         backdrop-filter:blur(14px) saturate(1.2); -webkit-backdrop-filter:blur(14px) saturate(1.2);
+         border-bottom:1px solid transparent; transition:border-color .3s ease, background .3s ease}
+  header.stuck{border-bottom-color:var(--line); background:rgba(250,243,234,.94)}
+  nav{display:flex; align-items:center; justify-content:space-between; gap:16px;
+      height:var(--nav-h); padding:0 22px; max-width:var(--maxw); margin:0 auto}
+  nav .links{display:flex; align-items:center; gap:24px}
+  nav .links a{color:var(--cocoa); font-weight:700; font-size:15px; position:relative}
+  nav .links a:not(.btn):hover{text-decoration:none; color:var(--copper)}
+  nav .links a:not(.btn)::after{content:''; position:absolute; left:0; right:0; bottom:-6px; height:2px;
+      background:var(--copper); border-radius:2px; transform:scaleX(0); transform-origin:left; transition:transform .25s ease}
+  nav .links a:not(.btn):hover::after{transform:scaleX(1)}
+  .scrollbar{position:absolute; left:0; bottom:-1px; height:2px; width:100%; transform:scaleX(0); transform-origin:left;
+             background:linear-gradient(90deg,var(--copper),var(--gold)); will-change:transform}
+
   .btn{display:inline-flex; align-items:center; justify-content:center; gap:8px; background:var(--copper); color:#fff !important;
        border-radius:999px; padding:11px 20px; font-weight:800; font-size:15px; text-decoration:none !important; border:none; cursor:pointer;
-       transition:transform .12s ease, filter .12s ease}
-  .btn:hover{filter:brightness(1.06)}
-  .btn:active{transform:scale(.97)}
-  @media(max-width:720px){ nav .links a:not(.btn){display:none} }
+       box-shadow:0 8px 20px rgba(184,115,51,.28); transition:transform .16s ease, box-shadow .16s ease, filter .16s ease}
+  .btn:hover{filter:brightness(1.06); transform:translateY(-2px); box-shadow:0 14px 26px rgba(184,115,51,.34)}
+  .btn:active{transform:translateY(0) scale(.97)}
+  @media(max-width:820px){ nav .links a:not(.btn){display:none} }
 
-  /* Hero */
-  .hero{padding:40px 0 44px}
-  /* start, not center: the phone is taller than the copy, and centring against it
-     pushed the headline into the middle of the viewport */
-  .hero-grid{display:grid; grid-template-columns:1.05fr .95fr; gap:44px; align-items:start}
-  .eyebrow{display:inline-flex; align-items:center; gap:8px; background:var(--copper-soft); color:var(--copper);
-           border-radius:999px; padding:6px 14px; font-size:13px; font-weight:800; letter-spacing:.4px}
-  h1{font-size:clamp(34px,5vw,54px); line-height:1.1; margin:16px 0 14px; font-weight:900; letter-spacing:-1px}
-  h1 em{font-style:normal; color:var(--copper)}
-  .lead{font-size:18px; color:var(--mute); max-width:30em; margin:0 0 26px}
+  /* ---------------- Store badges ---------------- */
   .stores{display:flex; flex-wrap:wrap; gap:12px; align-items:center}
-  .store{display:inline-flex; align-items:center; gap:10px; background:var(--cocoa); color:#fff !important; border-radius:14px;
-         padding:11px 18px; font-weight:700; text-decoration:none !important; transition:transform .12s ease, filter .12s ease}
-  .store:hover{filter:brightness(1.12)}
-  .store:active{transform:scale(.97)}
+  .store{display:inline-flex; align-items:center; gap:11px; background:var(--cocoa); color:#fff !important; border-radius:15px;
+         padding:11px 18px; font-weight:700; text-decoration:none !important;
+         transition:transform .16s ease, filter .16s ease, box-shadow .16s ease; box-shadow:var(--shadow-sm)}
+  .store:hover{filter:brightness(1.14); transform:translateY(-2px); box-shadow:var(--shadow)}
+  .store:active{transform:translateY(0) scale(.97)}
+  .store svg{width:20px; height:20px; fill:currentColor; flex:none}
   .store small{display:block; font-size:10px; opacity:.75; font-weight:600; line-height:1.1}
   .store b{display:block; font-size:15px; line-height:1.2}
-  .store.soon{background:var(--panel2); color:var(--mute) !important; cursor:default}
-  .store.soon:hover{filter:none}
-  .hero-shot{display:flex; justify-content:center}
-  /* max-width + max-height with auto width/height: the browser fits the image
-     inside both limits and keeps the aspect ratio. Setting an explicit width
-     alongside max-height would squash it. */
-  .hero-shot img{max-width:min(290px,72vw); max-height:64vh; width:auto; height:auto;
-                 filter:drop-shadow(0 24px 44px rgba(42,31,22,.18))}
-  @media(max-width:860px){ .hero-grid{grid-template-columns:1fr; text-align:center} .lead{margin-inline:auto} .stores{justify-content:center} }
+  .store.soon{background:var(--panel2); color:var(--mute) !important; cursor:default; box-shadow:none}
+  .store.soon:hover{filter:none; transform:none; box-shadow:none}
 
-  /* Sections */
-  section{padding:56px 0}
-  .sec-head{text-align:center; max-width:36em; margin:0 auto 36px}
-  h2{font-size:clamp(26px,3.4vw,36px); font-weight:900; margin:0 0 10px; letter-spacing:-.5px}
+  /* ---------------- Shared 3D helpers ---------------- */
+  /* --mx/--my are pointer offsets in the range -1..1, written by JS on .tilt-root.
+     Every parallax layer reads the same two numbers, so the whole scene moves as one. */
+  .tilt-root{--mx:0; --my:0}
+  .stage3d{perspective:1500px; perspective-origin:50% 46%}
+  .phone{position:relative; transform-style:preserve-3d; will-change:transform}
+  .phone img.screen{display:block; width:100%; height:auto;
+    filter:drop-shadow(0 30px 50px rgba(42,31,22,.22)) drop-shadow(0 8px 12px rgba(42,31,22,.10))}
+  /* Screenshots already carry the device frame, so the sheen only needs to match its corners. */
+  .glare{position:absolute; inset:0; border-radius:11% / 5.6%; pointer-events:none;
+         background:linear-gradient(118deg, rgba(255,255,255,.5) 0%, rgba(255,255,255,.12) 26%, rgba(255,255,255,0) 46%);
+         opacity:.55; mix-blend-mode:screen}
+
+  .chip{position:absolute; display:flex; align-items:center; gap:9px; background:var(--white); border-radius:16px;
+        padding:10px 14px; box-shadow:var(--shadow); font-size:13px; font-weight:800; white-space:nowrap;
+        border:1px solid rgba(255,255,255,.7)}
+  .chip .ic{width:26px; height:26px; border-radius:50%; display:grid; place-items:center; font-size:14px; flex:none}
+  .chip small{display:block; font-size:11px; font-weight:700; color:var(--mute); line-height:1.15}
+  .chip b{display:block; font-size:14px; line-height:1.2}
+
+  /* ---------------- Hero ---------------- */
+  .hero{padding:34px 0 20px; position:relative}
+  .hero-grid{display:grid; grid-template-columns:1.02fr .98fr; gap:40px; align-items:center}
+  .hero-shot{position:relative; display:flex; justify-content:center; min-height:min(66vh,640px)}
+  .hero .phone{width:min(292px,70vw)}
+  .float{position:absolute; inset:0; display:flex; justify-content:center; align-items:center; pointer-events:none}
+  html:not(.reduce) .bob{animation:bob 7s ease-in-out infinite}
+  @keyframes bob{0%,100%{transform:translateY(0)} 50%{transform:translateY(-14px)}}
+
+  .halo{position:absolute; width:min(420px,86vw); aspect-ratio:1; border-radius:50%;
+        background:radial-gradient(circle at 50% 45%, rgba(184,115,51,.20), rgba(184,115,51,0) 62%)}
+
+  .cue{display:flex; flex-direction:column; align-items:center; gap:8px; width:max-content; margin:6px auto 0;
+       color:var(--mute); font-size:13px; font-weight:800; letter-spacing:.3px}
+  .cue:hover{text-decoration:none; color:var(--copper)}
+  .cue i{width:12px; height:12px; border-right:2px solid currentColor; border-bottom:2px solid currentColor;
+         transform:rotate(45deg) translate(-2px,-2px); border-radius:0 0 2px 0}
+  html:not(.reduce) .cue i{animation:nudge 1.9s ease-in-out infinite}
+  @keyframes nudge{0%,100%{transform:rotate(45deg) translate(-2px,-2px)} 50%{transform:rotate(45deg) translate(2px,2px)}}
+
+  .proof{display:flex; flex-wrap:wrap; gap:10px 26px; margin-top:24px; color:var(--mute); font-size:14px; font-weight:700}
+  .proof span{display:inline-flex; align-items:center; gap:8px}
+  .proof .tick{width:18px; height:18px; border-radius:50%; background:var(--sage); color:var(--sage-ink);
+               display:grid; place-items:center; font-size:11px; font-weight:900}
+
+  @media(max-width:900px){
+    .hero-grid{grid-template-columns:1fr; text-align:center; gap:8px}
+    .lead{margin-inline:auto} .stores,.proof{justify-content:center}
+    .hero-shot{min-height:auto; margin-top:26px}
+    .hero .phone{width:min(250px,64vw)}
+  }
+
+  /* ---------------- Section furniture ---------------- */
+  section{padding:64px 0; position:relative}
+  .sec-head{text-align:center; max-width:38em; margin:0 auto 40px}
   .sec-head p{color:var(--mute); margin:0; font-size:17px}
 
-  /* Features */
-  .features{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px}
-  .card{background:var(--white); border-radius:22px; padding:24px; box-shadow:var(--shadow)}
-  .blob{width:52px; height:52px; display:flex; align-items:center; justify-content:center; margin-bottom:14px;
-        border-radius:44% 56% 56% 44% / 56% 44% 56% 44%; font-size:24px}
-  .card h3{margin:0 0 6px; font-size:19px; font-weight:800}
+  /* Reveal-on-scroll. Only armed when JS is running. */
+  .js:not(.reduce) .reveal{opacity:0; transform:translateY(22px)}
+  .js:not(.reduce) .reveal.in{opacity:1; transform:none;
+      transition:opacity .7s ease, transform .7s cubic-bezier(.22,.75,.3,1); transition-delay:calc(var(--i,0) * 70ms)}
+
+  /* ---------------- Journey (scroll-driven) ---------------- */
+  .journey{background:linear-gradient(180deg, transparent, rgba(246,238,226,.75) 10%, rgba(246,238,226,.75) 90%, transparent); padding:56px 0 0}
+  .journey-track{position:relative; height:calc(100vh + 5 * 82vh); height:calc(100svh + 5 * 82svh)}
+  .journey-stage{position:sticky; top:0; height:100vh; height:100svh; display:flex; flex-direction:column;
+                 justify-content:center; overflow:hidden; padding-top:var(--nav-h)}
+  /* --fit is set by JS: on a viewport too short for the stage, the whole block
+     scales down rather than getting clipped by the sticky frame. */
+  .stage-inner{width:100%; transform:scale(var(--fit,1)); transform-origin:center center}
+  .stage-grid{display:grid; grid-template-columns:1fr auto 1fr; gap:30px; align-items:center;
+              max-width:var(--maxw); margin:0 auto; padding:0 22px; width:100%}
+
+  .beats{position:relative; min-height:290px}
+  .beat{position:absolute; inset:0; display:flex; flex-direction:column; justify-content:center}
+  .js .beat{opacity:0; transform:translateY(18px) scale(.985); pointer-events:none}
+  .js .beat.on{pointer-events:auto}
+  .beat .kicker{display:inline-flex; align-self:flex-start; align-items:center; gap:9px; background:var(--white);
+                border-radius:999px; padding:6px 14px 6px 7px; font-size:12px; font-weight:900; letter-spacing:.5px;
+                text-transform:uppercase; color:var(--copper); box-shadow:var(--shadow-sm)}
+  .beat .kicker i{width:22px; height:22px; border-radius:50%; background:var(--copper-soft); display:grid;
+                  place-items:center; font-style:normal; font-size:12px}
+  .beat h3{font-size:clamp(24px,2.8vw,33px); font-weight:900; margin:14px 0 10px; line-height:1.14}
+  .beat p{margin:0; color:var(--mute); font-size:16.5px; max-width:26em}
+  .beat ul{list-style:none; margin:18px 0 0; padding:0; display:flex; flex-wrap:wrap; gap:8px}
+  .beat li{background:var(--white); border:1px solid var(--line); border-radius:999px; padding:7px 13px;
+           font-size:13px; font-weight:800; box-shadow:var(--shadow-sm)}
+  .beat-shot{display:none}
+
+  .stage-phone{position:relative; display:flex; align-items:center; justify-content:center}
+  .journey .phone{width:min(268px,58vw)}
+  .screen-stack{position:relative}
+  .journey .phone{filter:drop-shadow(0 30px 50px rgba(42,31,22,.22))}
+  .journey .phone img.screen{filter:none}
+  .screen-stack img{position:absolute; inset:0; width:100%; height:auto}
+  .screen-stack img:first-child{position:relative}
+  .js .screen-stack img{opacity:0}
+  /* The arc behind the phone fills as you scroll: the visual "you, being sculpted". */
+  .sculpt-arc{position:absolute; width:132%; aspect-ratio:1; pointer-events:none; z-index:-1}
+  .sculpt-arc circle{fill:none; stroke-linecap:round; transform:rotate(-90deg); transform-origin:50% 50%}
+  .arc-track{stroke:rgba(184,115,51,.13); stroke-width:2}
+  .arc-fill{stroke:url(#arcgrad); stroke-width:3.4}
+
+  /* HUD */
+  .hud{display:flex; flex-direction:column; gap:14px; justify-self:end; width:min(270px,100%)}
+  .hud-card{background:var(--white); border-radius:22px; padding:18px; box-shadow:var(--shadow); border:1px solid rgba(255,255,255,.8)}
+  .hud-title{font-size:11px; font-weight:900; letter-spacing:.7px; text-transform:uppercase; color:var(--mute); margin-bottom:12px}
+  .rings{display:flex; align-items:center; gap:14px}
+  .rings svg{width:84px; height:84px; flex:none}
+  .rings circle{fill:none; stroke-linecap:round; transform:rotate(-90deg); transform-origin:50% 50%}
+  .rings .t{stroke-width:7; opacity:.22}
+  .rings .f{stroke-width:7}
+  .ring-key{display:grid; gap:5px; font-size:12px; font-weight:800; color:var(--mute)}
+  .ring-key span{display:flex; align-items:center; gap:7px}
+  .ring-key i{width:8px; height:8px; border-radius:50%; flex:none}
+  .readout{display:flex; align-items:baseline; gap:8px}
+  .readout b{font-size:34px; font-weight:900; letter-spacing:-1px; line-height:1; font-variant-numeric:tabular-nums}
+  .readout small{font-size:13px; color:var(--mute); font-weight:800}
+  .delta{margin-top:6px; font-size:13px; font-weight:800; color:var(--sage-ink)}
+  .spark{width:100%; height:auto; margin-top:10px; overflow:visible}
+  .spark path{fill:none; stroke:var(--sage-ink); stroke-width:2.6; stroke-linecap:round; stroke-linejoin:round}
+  .spark .area{fill:rgba(87,167,115,.14); stroke:none}
+  .spark .dot{fill:var(--copper)}
+
+  /* Rail */
+  .rail{display:flex; justify-content:center; gap:6px; margin:26px auto 0; padding:0 22px; flex-wrap:wrap}
+  .rail button{appearance:none; border:1px solid var(--line); background:var(--white); color:var(--mute);
+               border-radius:999px; padding:7px 14px; font:inherit; font-size:12.5px; font-weight:800; cursor:pointer;
+               transition:color .25s ease, background .25s ease, border-color .25s ease, transform .18s ease}
+  .rail button:hover{transform:translateY(-2px); color:var(--cocoa)}
+  .rail button[aria-current="true"]{background:var(--copper); border-color:var(--copper); color:#fff}
+  .journey-note{text-align:center; color:var(--mute); font-size:12.5px; font-weight:700; margin:14px 0 0; opacity:.85}
+
+  /* Below 1040 the stage stacks. Everything is sized against the viewport
+     height, because the sticky stage only ever gets one screen to work with. */
+  @media(max-width:1000px){
+    .stage-grid{grid-template-columns:1fr; gap:14px; justify-items:center; text-align:center}
+    .beats{min-height:212px; width:100%; max-width:520px; order:2}
+    .beat{align-items:center}
+    .beat .kicker{align-self:center}
+    .beat p{margin-inline:auto}
+    .beat ul{justify-content:center}
+    .stage-phone{order:1}
+    .journey .phone{width:min(186px,40vw,20svh)}
+    .hud{order:3; flex-direction:row; gap:10px; width:100%; max-width:520px; justify-self:center}
+    .hud-card{flex:1; padding:13px}
+    .hud-title{margin-bottom:8px}
+    .rings svg{width:56px; height:56px}
+    .ring-key{display:none}
+    .readout b{font-size:24px}
+    .rail{margin-top:16px}
+  }
+  @media(max-width:620px){
+    .journey .phone{width:min(150px,34vw,17svh)}
+    .beats{min-height:184px}
+    .beat h3{font-size:20px; margin:10px 0 8px}
+    .beat p{font-size:14.5px}
+    .beat ul{display:none}
+    .hud{gap:8px}
+    .hud-card{padding:10px}
+    .hud-title{display:none}
+    .rings{justify-content:center}
+    .rings svg{width:46px; height:46px}
+    .readout b{font-size:21px}
+    .spark{display:none}
+    .delta{font-size:11.5px; line-height:1.35}
+    /* One scrollable row: wrapping to two rows costs the stage 34px it hasn't got. */
+    .rail{gap:5px; margin-top:12px; flex-wrap:nowrap; overflow-x:auto; justify-content:flex-start;
+          scrollbar-width:none; -webkit-overflow-scrolling:touch}
+    .rail::-webkit-scrollbar{display:none}
+    .rail button{padding:6px 10px; font-size:11px; flex:none}
+    .journey-note{display:none}
+    /* Two floating chips is plenty on a phone; four is clutter. */
+    #hero-scene .chip[data-d="1.7"], #hero-scene .chip[data-d="2.9"]{display:none}
+    .chip{font-size:12px; padding:8px 12px}
+    .chip b{font-size:13px}
+  }
+
+  /* Stacked and short — a small laptop or a phone in landscape. */
+  @media(max-width:1000px) and (max-height:820px){
+    .journey .phone{width:min(120px,30vw,15svh)}
+    .beats{min-height:168px}
+    .stage-grid{gap:10px}
+    .rail{margin-top:8px}
+  }
+  /* Landscape phones: there is no room for the side panel, so it goes. */
+  @media(max-height:520px){
+    .journey .phone{width:min(104px,26vw,13svh)}
+    .hud, .journey-note{display:none}
+    .beat p{font-size:14px}
+  }
+
+  /* ---------------- Features ---------------- */
+  .features{display:grid; grid-template-columns:repeat(auto-fit,minmax(290px,1fr)); gap:18px}
+  .card{position:relative; background:var(--white); border-radius:24px; padding:26px; box-shadow:var(--shadow);
+        border:1px solid rgba(255,255,255,.8); transform-style:preserve-3d; will-change:transform; overflow:hidden}
+  .card::after{content:''; position:absolute; inset:0; border-radius:inherit; pointer-events:none; opacity:0;
+      background:radial-gradient(320px circle at var(--px,50%) var(--py,0%), rgba(184,115,51,.14), transparent 62%);
+      transition:opacity .3s ease}
+  .card:hover::after{opacity:1}
+  .card > *{transform:translateZ(24px)}
+  .blob{width:54px; height:54px; display:flex; align-items:center; justify-content:center; margin-bottom:16px;
+        border-radius:44% 56% 56% 44% / 56% 44% 56% 44%; font-size:25px; transition:border-radius .8s ease}
+  .card:hover .blob{border-radius:56% 44% 44% 56% / 44% 56% 44% 56%}
+  .card h3{margin:0 0 7px; font-size:19.5px; font-weight:800}
   .card p{margin:0; color:var(--mute); font-size:15px}
 
-  /* Screens */
-  .screens{display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:20px}
-  .screens figure{margin:0; text-align:center}
-  .screens img{width:100%; border-radius:20px; box-shadow:var(--shadow)}
-  .screens figcaption{margin-top:10px; font-size:14px; font-weight:700; color:var(--mute)}
+  /* ---------------- Screens deck ---------------- */
+  .deck-wrap{position:relative; perspective:1300px}
+  .deck{display:flex; gap:26px; overflow-x:auto; scroll-snap-type:x mandatory; padding:34px 0 30px;
+        scrollbar-width:none; -ms-overflow-style:none; cursor:grab; transform-style:preserve-3d}
+  .deck::-webkit-scrollbar{display:none}
+  .deck.dragging{cursor:grabbing; scroll-snap-type:none}
+  .deck figure{margin:0; flex:0 0 auto; width:min(232px,58vw); scroll-snap-align:center; text-align:center;
+               transform-style:preserve-3d; will-change:transform}
+  .deck figure:first-child{margin-left:max(22px, calc(50% - min(116px,29vw)))}
+  .deck figure:last-child{margin-right:max(22px, calc(50% - min(116px,29vw)))}
+  .deck img{width:100%; border-radius:24px; filter:drop-shadow(0 24px 40px rgba(42,31,22,.20)); pointer-events:none}
+  .deck figcaption{margin-top:14px; font-size:14px; font-weight:800; color:var(--mute); transition:color .3s ease}
+  .deck figure[data-active="true"] figcaption{color:var(--cocoa)}
+  .deck-nav{display:flex; justify-content:center; gap:10px; margin-top:6px}
+  .deck-nav button{width:44px; height:44px; border-radius:50%; border:1px solid var(--line); background:var(--white);
+                   color:var(--cocoa); cursor:pointer; font-size:17px; box-shadow:var(--shadow-sm);
+                   transition:transform .16s ease, background .16s ease}
+  .deck-nav button:hover{transform:translateY(-2px); background:var(--copper-soft)}
 
-  /* Steps */
-  .steps{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px}
-  .step{background:var(--panel2); border-radius:22px; padding:24px; display:flex; gap:14px; align-items:flex-start}
-  .num{flex:none; width:34px; height:34px; border-radius:50%; background:var(--copper); color:#fff;
-       display:flex; align-items:center; justify-content:center; font-weight:900}
+  /* ---------------- Steps ---------------- */
+  .steps{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:18px}
+  .step{background:var(--white); border-radius:24px; padding:26px; display:flex; gap:15px; align-items:flex-start;
+        box-shadow:var(--shadow-sm); border:1px solid var(--line)}
+  .num{flex:none; width:36px; height:36px; border-radius:50%; background:var(--copper); color:#fff;
+       display:grid; place-items:center; font-weight:900; box-shadow:0 6px 14px rgba(184,115,51,.3)}
   .step p{margin:0; font-size:15px}
 
-  /* CTA */
-  .cta{background:var(--white); border-radius:28px; padding:44px 28px; text-align:center; box-shadow:var(--shadow)}
-  .cta .stores{justify-content:center; margin-top:20px}
+  /* ---------------- CTA ---------------- */
+  .cta{position:relative; background:var(--white); border-radius:34px; padding:52px 28px; text-align:center;
+       box-shadow:var(--shadow); overflow:hidden; border:1px solid rgba(255,255,255,.8)}
+  .cta::before{content:''; position:absolute; inset:-40% -10% auto; height:70%;
+       background:radial-gradient(closest-side, rgba(184,115,51,.16), transparent)}
+  .cta > *{position:relative}
+  .cta .stores{justify-content:center; margin-top:22px}
+  .cta img.icon{border-radius:22px; box-shadow:var(--shadow)}
 
-  /* Footer */
-  footer{border-top:1px solid var(--line); margin-top:40px; padding:36px 0 44px; color:var(--mute); font-size:14px}
-  .foot-grid{display:flex; flex-wrap:wrap; gap:24px; justify-content:space-between; align-items:flex-start}
+  /* ---------------- Footer ---------------- */
+  footer{border-top:1px solid var(--line); margin-top:44px; padding:40px 0 48px; color:var(--mute); font-size:14px}
+  .foot-grid{display:flex; flex-wrap:wrap; gap:26px; justify-content:space-between; align-items:flex-start}
   .foot-links{display:flex; flex-wrap:wrap; gap:18px}
   .foot-links a{color:var(--mute); font-weight:700}
   .socials{display:flex; gap:10px}
-  .socials a{width:40px; height:40px; border-radius:50%; background:var(--white); display:flex; align-items:center;
-             justify-content:center; box-shadow:var(--shadow)}
+  .socials a{width:42px; height:42px; border-radius:50%; background:var(--white); display:grid; place-items:center;
+             box-shadow:var(--shadow-sm); transition:transform .16s ease}
+  .socials a:hover{transform:translateY(-3px)}
   .socials svg{width:19px; height:19px; fill:var(--cocoa)}
   .socials a:hover svg{fill:var(--copper)}
-  .legal{margin-top:22px; font-size:13px}
+  .legal{margin-top:24px; font-size:13px}
+
+  /* ---------------- Reduced motion: everything still works, nothing moves ---- */
+  html.reduce .journey-track{height:auto !important}
+  html.reduce .journey-stage{position:static; height:auto; padding:40px 0; overflow:visible}
+  html.reduce .stage-grid{grid-template-columns:1fr; max-width:760px}
+  html.reduce .stage-inner{transform:none}
+  html.reduce .beats{position:static; min-height:0; display:grid; gap:34px; width:100%}
+  html.reduce .beat{position:static; opacity:1 !important; transform:none !important; pointer-events:auto}
+  html.reduce .beat-shot{display:block; width:min(210px,54vw); margin:20px auto 0}
+  html.reduce .stage-phone,
+  html.reduce .rail,
+  html.reduce .hud{display:none}
+  html.reduce .glare{display:none}
+  html.reduce .deck{scroll-snap-type:none}
+  html.reduce *{animation:none !important}
 </style>
 </head>
 <body>
 
-<header>
+<div class="ambient" aria-hidden="true"><i class="a1"></i><i class="a2"></i><i class="a3"></i><span class="grain"></span></div>
+
+<header id="site-head">
   <nav>
     <a href="#top" class="wordmark" style="font-size:22px; color:var(--cocoa)">Sculpt<span>R</span></a>
     <div class="links">
+      <a href="#journey">The journey</a>
       <a href="#features">Features</a>
       <a href="#screens">Screens</a>
-      <a href="#how">How it works</a>
       <a href="support.html">Support</a>
       <a class="btn" href="#get">Get the app</a>
     </div>
   </nav>
+  <span class="scrollbar" id="scrollbar" aria-hidden="true"></span>
 </header>
 
 <main id="top">
 
-  <!-- Hero -->
+  <!-- ============================ HERO ============================ -->
   <section class="hero">
     <div class="wrap hero-grid">
       <div>
-        <span class="eyebrow">YOUR AI FITNESS COACH</span>
-        <h1>AI training and nutrition that <em>reshapes with you</em></h1>
-        <p class="lead">
+        <span class="eyebrow reveal"><span class="dot"></span> Your AI fitness coach</span>
+        <h1 class="reveal" style="--i:1">AI training and nutrition that <em>reshapes with you</em></h1>
+        <p class="lead reveal" style="--i:2">
           SculptR builds your workouts and meals around your goal, then tunes them every week as your body changes.
           Track food, weight, steps and training in one place.
         </p>
-        <div class="stores" id="hero-stores"></div>
+        <div class="stores reveal" style="--i:3" id="hero-stores"></div>
+        <div class="proof reveal" style="--i:4">
+          <span><i class="tick">✓</i> Free to download</span>
+          <span><i class="tick">✓</i> iPhone and Android</span>
+          <span><i class="tick">✓</i> No equipment needed</span>
+        </div>
       </div>
-      <div class="hero-shot">
-        <img src="assets/01-home.png" alt="The SculptR home screen showing daily rings for calories, steps, weigh-in and workout" width="520" height="1018" />
+
+      <div class="hero-shot stage3d tilt-root" id="hero-scene">
+        <div class="halo" aria-hidden="true"></div>
+        <div class="bob">
+          <div class="phone" id="hero-phone">
+            <img class="screen" src="assets/01-home.png" width="520" height="1018" fetchpriority="high"
+                 alt="The SculptR home screen showing daily rings for calories, steps, weigh-in and workout" />
+            <span class="glare" aria-hidden="true"></span>
+          </div>
+        </div>
+
+        <div class="float" aria-hidden="true">
+          <div class="chip" data-d="2.4" style="--z:90px; left:2%; top:16%">
+            <span class="ic" style="background:var(--peach)">🔥</span>
+            <span><small>Streak</small><b>12 days</b></span>
+          </div>
+          <div class="chip" data-d="1.7" style="--z:60px; right:0%; top:34%">
+            <span class="ic" style="background:var(--butter)">📸</span>
+            <span><small>Scanned from a photo</small><b>612 kcal · 41 g protein</b></span>
+          </div>
+          <div class="chip" data-d="2.9" style="--z:120px; left:-2%; bottom:20%">
+            <span class="ic" style="background:var(--sage)">✨</span>
+            <span><small>Sola</small><b>Plan updated for week 4</b></span>
+          </div>
+          <div class="chip" data-d="1.3" style="--z:40px; right:6%; bottom:9%">
+            <span class="ic" style="background:var(--sky)">◎</span>
+            <span><small>Today</small><b>Rings 4/4 closed</b></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <a class="cue" href="#journey">
+      <span>See a 12-week journey</span>
+      <i aria-hidden="true"></i>
+    </a>
+  </section>
+
+  <!-- ============================ JOURNEY ============================ -->
+  <!-- One sticky stage, six beats. Scroll position drives the phone's rotation,
+       which screenshot is showing, the rings, the weight readout and the trend line. -->
+  <section id="journey" class="journey" aria-label="How the app works over twelve weeks">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <h2>Watch a plan take shape</h2>
+        <p>Scroll through twelve weeks with SculptR — from your first day to a body that moved.</p>
+      </div>
+    </div>
+
+    <div class="journey-track" id="journey-track">
+      <div class="journey-stage">
+
+        <div class="stage-inner" id="stage-inner">
+        <div class="stage-grid">
+
+          <div class="beats" id="beats">
+            <article class="beat" data-shot="0">
+              <span class="kicker"><i>1</i> Day 1 · Setup</span>
+              <h3>Answer a few questions. That's the whole setup.</h3>
+              <p>Your goal, your gear, how you like to train and what you won't eat. Home opens with four rings waiting to be closed.</p>
+              <ul><li>Goal set</li><li>Rings 0/4</li><li>Streak starts today</li></ul>
+              <img class="beat-shot" src="assets/01-home.png" alt="Home screen with four daily rings" loading="lazy" />
+            </article>
+
+            <article class="beat" data-shot="1">
+              <span class="kicker"><i>2</i> Day 1 · Your plan</span>
+              <h3>Your training and meals are written while you wait.</h3>
+              <p>Sessions built around the equipment you actually have, meals around the food you actually eat — and nothing that touches an old injury.</p>
+              <ul><li>Around your gear</li><li>Around your diet</li><li>Injury-aware</li></ul>
+              <img class="beat-shot" src="assets/02-plans.png" alt="An AI generated workout plan" loading="lazy" />
+            </article>
+
+            <article class="beat" data-shot="3">
+              <span class="kicker"><i>3</i> Week 1 · Logging</span>
+              <h3>Logging a day takes about thirty seconds.</h3>
+              <p>Scan a barcode, search millions of foods, or snap the plate and let Sola read the calories and macros off the photo.</p>
+              <ul><li>Barcode + database</li><li>AI photo scan</li><li>Weight and steps</li></ul>
+              <img class="beat-shot" src="assets/04-log.png" alt="Logging food, weight and workouts" loading="lazy" />
+            </article>
+
+            <article class="beat" data-shot="2">
+              <span class="kicker"><i>4</i> Week 3 · Sola</span>
+              <h3>Ask anything, at the moment you need it.</h3>
+              <p>Allergic to oats? Gym busy? Not sure the form is right? Sola swaps the food, rewrites the session and answers in seconds.</p>
+              <ul><li>Food swaps</li><li>Form checks</li><li>Plan tweaks</li></ul>
+              <img class="beat-shot" src="assets/03-sola.png" alt="Chatting with Sola, the AI coach" loading="lazy" />
+            </article>
+
+            <article class="beat" data-shot="4">
+              <span class="kicker"><i>5</i> Week 6 · Momentum</span>
+              <h3>Swap out anything you don't love.</h3>
+              <p>A library of foods and exercises sits behind every plan, so a meal you're bored of or a movement you can't do is one tap from being replaced.</p>
+              <ul><li>Millions of foods</li><li>Exercise library</li><li>One-tap swaps</li></ul>
+              <img class="beat-shot" src="assets/05-library.png" alt="The food and exercise library" loading="lazy" />
+            </article>
+
+            <article class="beat" data-shot="5">
+              <span class="kicker"><i>6</i> Week 12 · Progress</span>
+              <h3>The plan reshaped every week. So did you.</h3>
+              <p>Weigh-ins feed straight back into your calories and cardio, so the plan you finish on is nothing like the one you started with.</p>
+              <ul><li>Weekly recalibration</li><li>Trend, not daily noise</li><li>Streak intact</li></ul>
+              <img class="beat-shot" src="assets/06-progress.png" alt="Progress screen with weight trend" loading="lazy" />
+            </article>
+          </div>
+
+          <div class="stage-phone stage3d tilt-root" id="journey-scene">
+            <svg class="sculpt-arc" viewBox="0 0 200 200" aria-hidden="true">
+              <defs>
+                <linearGradient id="arcgrad" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#E0A63C" /><stop offset="100%" stop-color="#B87333" />
+                </linearGradient>
+              </defs>
+              <circle class="arc-track" cx="100" cy="100" r="94" />
+              <circle class="arc-fill" id="arc-fill" cx="100" cy="100" r="94" pathLength="100"
+                      stroke-dasharray="100" stroke-dashoffset="100" />
+            </svg>
+
+            <div class="phone" id="journey-phone">
+              <div class="screen-stack" id="screen-stack">
+                <img class="screen" src="assets/01-home.png" width="520" height="1018" alt="Home screen with daily rings" />
+                <img class="screen" src="assets/02-plans.png" width="520" height="1018" alt="AI generated workout plan" loading="lazy" />
+                <img class="screen" src="assets/03-sola.png" width="520" height="1018" alt="Chatting with Sola" loading="lazy" />
+                <img class="screen" src="assets/04-log.png" width="520" height="1018" alt="Logging food and workouts" loading="lazy" />
+                <img class="screen" src="assets/05-library.png" width="520" height="1018" alt="Food and exercise library" loading="lazy" />
+                <img class="screen" src="assets/06-progress.png" width="520" height="1018" alt="Progress and weight trend" loading="lazy" />
+              </div>
+              <span class="glare" aria-hidden="true"></span>
+            </div>
+          </div>
+
+          <aside class="hud" aria-hidden="true">
+            <div class="hud-card">
+              <div class="hud-title">Rings closed</div>
+              <div class="rings">
+                <svg viewBox="0 0 100 100">
+                  <circle class="t" cx="50" cy="50" r="42" stroke="#B87333" />
+                  <circle class="t" cx="50" cy="50" r="31" stroke="#57A773" />
+                  <circle class="t" cx="50" cy="50" r="20" stroke="#6FA3D8" />
+                  <circle class="t" cx="50" cy="50" r="9"  stroke="#E0A63C" />
+                  <circle class="f" id="r0" cx="50" cy="50" r="42" stroke="#B87333" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100" />
+                  <circle class="f" id="r1" cx="50" cy="50" r="31" stroke="#57A773" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100" />
+                  <circle class="f" id="r2" cx="50" cy="50" r="20" stroke="#6FA3D8" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100" />
+                  <circle class="f" id="r3" cx="50" cy="50" r="9"  stroke="#E0A63C" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100" />
+                </svg>
+                <div class="ring-key">
+                  <span><i style="background:#B87333"></i> Calories</span>
+                  <span><i style="background:#57A773"></i> Steps</span>
+                  <span><i style="background:#6FA3D8"></i> Weigh-in</span>
+                  <span><i style="background:#E0A63C"></i> Workout</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="hud-card">
+              <div class="hud-title">Weight trend</div>
+              <div class="readout"><b id="kg">84.0</b><small>kg</small></div>
+              <div class="delta"><span id="sculpted">0</span>% sculpted · <span id="streak">0</span> day streak</div>
+              <svg class="spark" viewBox="0 0 200 56">
+                <path class="area" id="spark-area" d="" />
+                <path id="spark-line" d="" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100" />
+                <circle class="dot" id="spark-dot" cx="0" cy="0" r="3.6" opacity="0" />
+              </svg>
+            </div>
+          </aside>
+        </div>
+
+        <div class="rail" id="rail" aria-label="Jump to a stage of the journey"></div>
+        <p class="journey-note">Figures shown are the app's example data. Your plan, and your pace, are your own.</p>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- Features -->
+  <!-- ============================ FEATURES ============================ -->
   <section id="features">
     <div class="wrap">
-      <div class="sec-head">
+      <div class="sec-head reveal">
         <h2>Everything you need, in one app</h2>
         <p>No juggling a tracker, a plan and a coach. SculptR does all three.</p>
       </div>
-      <div class="features">
-        <div class="card">
+      <div class="features" id="feature-grid">
+        <div class="card reveal" style="--i:0">
           <div class="blob" style="background:var(--sage)">✨</div>
           <h3>Adaptive AI</h3>
           <p>Your plan rewrites itself. Sola reads your weigh-ins and shifts calories and cardio to keep you moving.</p>
         </div>
-        <div class="card">
+        <div class="card reveal" style="--i:1">
           <div class="blob" style="background:var(--sky)">📋</div>
           <h3>All-in-one logging</h3>
           <p>Food, weight, steps and workouts in one place, with a food database covering millions of products.</p>
         </div>
-        <div class="card">
+        <div class="card reveal" style="--i:2">
           <div class="blob" style="background:var(--peach)">💬</div>
           <h3>Sola, your AI coach</h3>
           <p>Ask anything. Sola swaps foods, tweaks your plans and answers form questions in seconds.</p>
         </div>
-        <div class="card">
+        <div class="card reveal" style="--i:3">
           <div class="blob" style="background:var(--butter)">📸</div>
           <h3>AI calorie scan</h3>
           <p>Snap your meal and Sola estimates the calories and macros straight from the photo.</p>
         </div>
-        <div class="card">
+        <div class="card reveal" style="--i:4">
           <div class="blob" style="background:var(--copper-soft)">◎</div>
           <h3>Close your rings</h3>
           <p>Calories, steps, weigh-in and workout. Four simple rings to close every day, with streaks to keep you honest.</p>
         </div>
-        <div class="card">
+        <div class="card reveal" style="--i:5">
           <div class="blob" style="background:var(--sage)">🏋️</div>
           <h3>Plans built for you</h3>
           <p>Workouts around your equipment, goal and injuries. Meals around your diet, allergies and the foods you love.</p>
@@ -203,14 +651,17 @@
     </div>
   </section>
 
-  <!-- Screens -->
-  <section id="screens" style="background:var(--panel2)">
+  <!-- ============================ SCREENS ============================ -->
+  <section id="screens">
     <div class="wrap">
-      <div class="sec-head">
+      <div class="sec-head reveal">
         <h2>A look inside</h2>
-        <p>Clean, warm and quick to use, on iPhone and Android.</p>
+        <p>Clean, warm and quick to use, on iPhone and Android. Drag to explore.</p>
       </div>
-      <div class="screens">
+    </div>
+
+    <div class="deck-wrap">
+      <div class="deck" id="deck" tabindex="0" role="group" aria-label="App screenshots, draggable">
         <figure><img src="assets/01-home.png" alt="Home screen with daily rings" loading="lazy" /><figcaption>Daily rings</figcaption></figure>
         <figure><img src="assets/03-sola.png" alt="Chat with Sola, the AI coach" loading="lazy" /><figcaption>Sola, your coach</figcaption></figure>
         <figure><img src="assets/02-plans.png" alt="AI generated workout plan" loading="lazy" /><figcaption>Adaptive plans</figcaption></figure>
@@ -218,30 +669,34 @@
         <figure><img src="assets/05-library.png" alt="Food and exercise library" loading="lazy" /><figcaption>Food and exercises</figcaption></figure>
         <figure><img src="assets/06-progress.png" alt="Progress and weight trend" loading="lazy" /><figcaption>See progress</figcaption></figure>
       </div>
+      <div class="deck-nav">
+        <button type="button" id="deck-prev" aria-label="Previous screenshot">←</button>
+        <button type="button" id="deck-next" aria-label="Next screenshot">→</button>
+      </div>
     </div>
   </section>
 
-  <!-- How it works -->
+  <!-- ============================ HOW ============================ -->
   <section id="how">
     <div class="wrap">
-      <div class="sec-head">
+      <div class="sec-head reveal">
         <h2>Getting started takes a minute</h2>
         <p>Answer a few questions and your first plan is ready.</p>
       </div>
       <div class="steps">
-        <div class="step"><div class="num">1</div><p>Tell SculptR your goal, your gear and how you like to train.</p></div>
-        <div class="step"><div class="num">2</div><p>Get an AI workout and meal plan built around your diet and any injuries.</p></div>
-        <div class="step"><div class="num">3</div><p>Log as you go and check in weekly. Sola recalibrates so progress never stalls.</p></div>
+        <div class="step reveal" style="--i:0"><div class="num">1</div><p>Tell SculptR your goal, your gear and how you like to train.</p></div>
+        <div class="step reveal" style="--i:1"><div class="num">2</div><p>Get an AI workout and meal plan built around your diet and any injuries.</p></div>
+        <div class="step reveal" style="--i:2"><div class="num">3</div><p>Log as you go and check in weekly. Sola recalibrates so progress never stalls.</p></div>
       </div>
     </div>
   </section>
 
-  <!-- CTA -->
+  <!-- ============================ CTA ============================ -->
   <section id="get">
     <div class="wrap">
-      <div class="cta">
-        <img src="assets/app-icon.png" alt="SculptR app icon" width="76" height="76" style="border-radius:20px" />
-        <h2 style="margin-top:14px">Start reshaping today</h2>
+      <div class="cta reveal">
+        <img class="icon" src="assets/app-icon.png" alt="SculptR app icon" width="78" height="78" />
+        <h2 style="margin-top:16px">Start reshaping today</h2>
         <p style="color:var(--mute); margin:0 auto; max-width:32em">
           Free to download. Log your food, weight and workouts, and meet Sola.
         </p>
@@ -286,32 +741,360 @@
 </footer>
 
 <script>
-  /* ------------------------------------------------------------------
+(function () {
+  'use strict';
+
+  /* ==================================================================
      STORE LINKS — the only thing you need to edit.
      Paste the real URL to make a badge live. Leave a value as "" and the
      badge automatically renders as a non-clickable "Coming soon" instead.
-     ------------------------------------------------------------------ */
+     ================================================================== */
   // Short form (no country code) so Apple redirects each visitor to their own storefront.
   var APP_STORE_URL   = "https://apps.apple.com/app/id6758404428";
   var GOOGLE_PLAY_URL = "https://play.google.com/store/apps/details?id=com.sculptr.app";
 
-  function badge(url, small, big) {
+  var APPLE_MARK =
+    '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.36 12.7c.02-2.3 1.88-3.4 1.96-3.45-1.07-1.56-2.73-1.78-3.32-1.8-1.41-.14-2.76.83-3.48.83-.72 0-1.83-.81-3-.79-1.55.02-2.98.9-3.77 2.28-1.61 2.79-.41 6.92 1.15 9.18.77 1.11 1.68 2.35 2.88 2.3 1.16-.05 1.6-.74 3-.74s1.79.74 3.01.72c1.24-.02 2.03-1.13 2.79-2.24.88-1.28 1.24-2.52 1.26-2.59-.03-.01-2.41-.93-2.48-3.7zM14.1 5.98c.64-.77 1.07-1.85.95-2.92-.92.04-2.03.61-2.69 1.38-.59.68-1.11 1.78-.97 2.83 1.03.08 2.07-.52 2.71-1.29z"/></svg>';
+  // The Play mark is a fan of four facets from the left edge; drawn in its own
+  // colours because a flat white version reads as a generic play button.
+  var PLAY_MARK =
+    '<svg viewBox="0 0 24 24" aria-hidden="true">' +
+      '<path fill="#00A0FF" d="M3 2.1 13 12 3 21.9c-.35-.25-.55-.7-.55-1.3V3.4c0-.6.2-1.05.55-1.3z"/>' +
+      '<path fill="#00E576" d="M3 2.1c.3-.2.75-.2 1.2.05L17.4 7.4 13 12z"/>' +
+      '<path fill="#FFCE00" d="M3 21.9 13 12l4.4 4.6L4.2 21.85c-.45.25-.9.25-1.2.05z"/>' +
+      '<path fill="#FF3A44" d="M17.4 7.4 21 9.9c.75.5.75 1.7 0 2.2l-3.6 2.5L13 12z"/>' +
+    '</svg>';
+
+  function badge(url, small, big, mark) {
     if (url) {
-      return '<a class="store" href="' + url + '" target="_blank" rel="noopener">' +
+      return '<a class="store" href="' + url + '" target="_blank" rel="noopener">' + mark +
              '<span><small>' + small + '</small><b>' + big + '</b></span></a>';
     }
     // Pending: read the two lines together as one sentence ("Coming soon on
     // Google Play"), not the live wording with "Coming soon" pasted underneath.
-    return '<span class="store soon"><span><small>Coming soon on</small><b>' + big + '</b></span></span>';
+    return '<span class="store soon">' + mark + '<span><small>Coming soon on</small><b>' + big + '</b></span></span>';
   }
 
-  var markup =
-    badge(APP_STORE_URL, "Download on the", "App Store") +
-    badge(GOOGLE_PLAY_URL, "Get it on", "Google Play");
+  var storeMarkup =
+    badge(APP_STORE_URL, "Download on the", "App Store", APPLE_MARK) +
+    badge(GOOGLE_PLAY_URL, "Get it on", "Google Play", PLAY_MARK);
 
-  document.getElementById("hero-stores").innerHTML = markup;
-  document.getElementById("cta-stores").innerHTML = markup;
-  document.getElementById("yr").textContent = new Date().getFullYear();
+  document.getElementById('hero-stores').innerHTML = storeMarkup;
+  document.getElementById('cta-stores').innerHTML = storeMarkup;
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  /* ------------------------------------------------------------------
+     Shared helpers and one animation loop. Everything below registers a
+     frame callback here rather than adding its own scroll listener.
+     ------------------------------------------------------------------ */
+  var reduce = document.documentElement.classList.contains('reduce');
+  var fine = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+
+  function clamp(v, a, b) { return v < a ? a : v > b ? b : v; }
+  function smooth(t) { return t * t * (3 - 2 * t); }
+  function lerp(a, b, t) { return a + (b - a) * t; }
+
+  var frameJobs = [];
+  function onFrame(fn) { frameJobs.push(fn); }
+  (function tick() {
+    for (var i = 0; i < frameJobs.length; i++) frameJobs[i]();
+    requestAnimationFrame(tick);
+  })();
+
+  /* ---------------- Header state + scroll progress ---------------- */
+  var head = document.getElementById('site-head');
+  var bar = document.getElementById('scrollbar');
+  onFrame(function () {
+    var y = window.scrollY || window.pageYOffset;
+    head.classList.toggle('stuck', y > 8);
+    var max = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.transform = 'scaleX(' + (max > 0 ? clamp(y / max, 0, 1) : 0) + ')';
+  });
+
+  /* ---------------- Reveal on scroll ---------------- */
+  if (!reduce && 'IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, { rootMargin: '0px 0px -12% 0px', threshold: 0.15 });
+    document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+  } else {
+    document.querySelectorAll('.reveal').forEach(function (el) { el.classList.add('in'); });
+  }
+
+  /* ---------------- Pointer parallax ----------------
+     Writes --mx/--my (-1..1) on each .tilt-root, eased towards the pointer so
+     the scene glides instead of snapping. Touch devices skip it entirely. */
+  var tiltRoots = [].slice.call(document.querySelectorAll('.tilt-root'));
+  var pointer = { x: 0, y: 0 }, eased = { x: 0, y: 0 };
+  if (fine && !reduce) {
+    window.addEventListener('pointermove', function (e) {
+      pointer.x = (e.clientX / window.innerWidth) * 2 - 1;
+      pointer.y = (e.clientY / window.innerHeight) * 2 - 1;
+    }, { passive: true });
+    onFrame(function () {
+      eased.x = lerp(eased.x, pointer.x, 0.07);
+      eased.y = lerp(eased.y, pointer.y, 0.07);
+      for (var i = 0; i < tiltRoots.length; i++) {
+        tiltRoots[i].style.setProperty('--mx', eased.x.toFixed(3));
+        tiltRoots[i].style.setProperty('--my', eased.y.toFixed(3));
+      }
+    });
+  }
+
+  /* Hero phone + floating chips ride the same two numbers. */
+  var heroPhone = document.getElementById('hero-phone');
+  var chips = [].slice.call(document.querySelectorAll('#hero-scene .chip'));
+  if (!reduce) {
+    onFrame(function () {
+      var rx = (-eased.y * 6).toFixed(2), ry = (eased.x * 11).toFixed(2);
+      heroPhone.style.transform = 'rotateX(' + rx + 'deg) rotateY(' + ry + 'deg) translateZ(0)';
+      for (var i = 0; i < chips.length; i++) {
+        var d = parseFloat(chips[i].dataset.d) || 1;
+        chips[i].style.transform =
+          'translate3d(' + (eased.x * d * -13).toFixed(1) + 'px,' + (eased.y * d * -11).toFixed(1) + 'px,' +
+          (chips[i].style.getPropertyValue('--z') || '0px') + ') rotateY(' + (eased.x * 5).toFixed(2) + 'deg)';
+      }
+    });
+  }
+
+  /* ==================================================================
+     THE JOURNEY
+     One sticky stage. Scroll position through the track becomes a single
+     0..1 number, and everything on the stage is a function of it.
+     ================================================================== */
+  var track = document.getElementById('journey-track');
+  var beats = [].slice.call(document.querySelectorAll('#beats .beat'));
+  var screens = [].slice.call(document.querySelectorAll('#screen-stack img'));
+  var journeyPhone = document.getElementById('journey-phone');
+  var rail = document.getElementById('rail');
+  var RAIL_LABELS = ['Day 1', 'Your plan', 'Week 1', 'Week 3', 'Week 6', 'Week 12'];
+  var N = beats.length;
+
+  if (!reduce && track) {
+    // Rail buttons: the journey is scrubbable by hand, not only by scrolling.
+    var railBtns = RAIL_LABELS.map(function (label, k) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.textContent = label;
+      b.addEventListener('click', function () {
+        // offsetTop is relative to the positioned section, so measure against the page.
+        var top = track.getBoundingClientRect().top + window.scrollY;
+        var span = track.offsetHeight - window.innerHeight;
+        window.scrollTo({ top: top + span * (k / (N - 1)), behavior: 'smooth' });
+      });
+      rail.appendChild(b);
+      return b;
+    });
+
+    // Weekly weigh-ins behind the trend line: real-looking, not a clean slope.
+    var WEIGH = [84.0, 83.4, 83.5, 82.6, 82.0, 81.9, 81.1, 80.4, 80.5, 79.7, 79.2, 78.8, 78.4];
+    var line = document.getElementById('spark-line');
+    var area = document.getElementById('spark-area');
+    var dot = document.getElementById('spark-dot');
+    // x spreads the 13 weigh-ins across the box; y maps 78.0kg to the floor
+    // and 84.5kg to the ceiling, so the line falls as the weight does.
+    var pts = WEIGH.map(function (w, i) {
+      return [6 + (i / (WEIGH.length - 1)) * 188, 50 - ((w - 78.0) / 6.5) * 42];
+    });
+    var d = pts.map(function (p, i) { return (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1); }).join(' ');
+    line.setAttribute('d', d);
+    area.setAttribute('d', d + ' L194 54 L6 54 Z');
+    var lineLen = line.getTotalLength();
+
+    var rings = [0, 1, 2, 3].map(function (i) { return document.getElementById('r' + i); });
+    var arc = document.getElementById('arc-fill');
+    var kgEl = document.getElementById('kg');
+    var sculptedEl = document.getElementById('sculpted');
+    var streakEl = document.getElementById('streak');
+
+    // The beats sit on top of each other, so the box needs to be as tall as the
+    // tallest one — measured, not guessed, or long copy spills over the HUD.
+    var beatsBox = document.getElementById('beats');
+    function sizeBeats() {
+      beatsBox.style.height = 'auto';
+      var tallest = 0;
+      for (var i = 0; i < N; i++) {
+        beats[i].style.position = 'static';
+        tallest = Math.max(tallest, beats[i].offsetHeight);
+        beats[i].style.position = '';
+      }
+      beatsBox.style.height = tallest + 'px';
+      fitStage();
+    }
+
+    var stage = document.querySelector('.journey-stage');
+    var inner = document.getElementById('stage-inner');
+    function fitStage() {
+      inner.style.setProperty('--fit', 1);
+      var avail = stage.clientHeight - parseFloat(getComputedStyle(stage).paddingTop) - 16;
+      var need = inner.offsetHeight;
+      inner.style.setProperty('--fit', need > avail ? Math.max(avail / need, 0.6).toFixed(3) : 1);
+    }
+    sizeBeats();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(sizeBeats);
+    var resizeTimer;
+    window.addEventListener('resize', function () {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(sizeBeats, 150);
+    });
+
+    var shown = -1, lastP = -1;
+
+    onFrame(function () {
+      var span = track.offsetHeight - window.innerHeight;
+      if (span <= 0) return;
+      var p = clamp((-track.getBoundingClientRect().top) / span, 0, 1);
+      if (Math.abs(p - lastP) < 0.0004) return;   // nothing moved; skip the writes
+      lastP = p;
+
+      var pos = p * (N - 1);       // continuous beat index, 0..N-1
+      var active = Math.round(pos);
+
+      for (var k = 0; k < N; k++) {
+        var dist = Math.abs(pos - k);
+        // Copy hands over cleanly — two blocks of text never sit on top of each other.
+        var tText = smooth(clamp((0.5 - dist) / 0.10, 0, 1));
+        beats[k].style.opacity = tText;
+        beats[k].style.transform = 'translateY(' + ((1 - tText) * 16).toFixed(1) + 'px) scale(' + (0.985 + tText * 0.015).toFixed(3) + ')';
+        beats[k].classList.toggle('on', k === active);
+        screens[k].style.opacity = 0;
+        screens[k].style.zIndex = 0;
+        screens[k].style.clipPath = '';
+      }
+
+      // Every screenshot carries the same device frame, so the next screen is
+      // wiped in from the top rather than cross-dissolved: the frame never
+      // moves, and you never catch two UIs ghosting through each other.
+      var from = Math.min(Math.floor(pos), N - 2);
+      var mix = smooth(clamp(((pos - from) - 0.40) / 0.2, 0, 1));
+      var below = screens[+beats[from].dataset.shot];
+      var above = screens[+beats[from + 1].dataset.shot];
+      below.style.opacity = 1; below.style.zIndex = 1; below.style.clipPath = '';
+      above.style.opacity = 1; above.style.zIndex = 2;
+      above.style.clipPath = 'inset(0 0 ' + ((1 - mix) * 100).toFixed(2) + '% 0)';
+
+      // The phone turns through the whole journey, and the pointer nudges it further.
+      journeyPhone.style.transform =
+        'rotateX(' + (2 - eased.y * 4).toFixed(2) + 'deg) rotateY(' + (-15 + p * 29 + eased.x * 6).toFixed(2) + 'deg)';
+
+      arc.setAttribute('stroke-dashoffset', (100 - 100 * p).toFixed(2));
+      for (var r = 0; r < 4; r++) {
+        rings[r].setAttribute('stroke-dashoffset', (100 - 100 * clamp(p * 1.25 - r * 0.06, 0, 1)).toFixed(2));
+      }
+
+      var e = smooth(p);
+      kgEl.textContent = (84.0 - 5.6 * e).toFixed(1);
+      sculptedEl.textContent = Math.round(64 * e);
+      streakEl.textContent = Math.round(84 * p);
+
+      line.setAttribute('stroke-dashoffset', (100 - 100 * p).toFixed(2));
+      area.style.opacity = p.toFixed(2);
+      var pt = line.getPointAtLength(lineLen * p);
+      dot.setAttribute('cx', pt.x); dot.setAttribute('cy', pt.y);
+      dot.setAttribute('opacity', p > 0.02 ? 1 : 0);
+
+      if (active !== shown) {
+        shown = active;
+        for (var b = 0; b < railBtns.length; b++) {
+          railBtns[b].setAttribute('aria-current', b === active ? 'true' : 'false');
+        }
+        // On narrow screens the rail scrolls sideways: keep the live chip in view.
+        if (rail.scrollWidth > rail.clientWidth) {
+          var chip = railBtns[active];
+          rail.scrollTo({ left: chip.offsetLeft - (rail.clientWidth - chip.offsetWidth) / 2, behavior: 'smooth' });
+        }
+      }
+    });
+  }
+
+  /* ==================================================================
+     SCREENS DECK — a draggable coverflow. Native scrolling does the work;
+     the transforms are just painted on top of wherever it lands.
+     ================================================================== */
+  var deck = document.getElementById('deck');
+  if (deck) {
+    var figs = [].slice.call(deck.querySelectorAll('figure'));
+
+    if (!reduce) {
+      onFrame(function () {
+        var mid = deck.getBoundingClientRect().left + deck.clientWidth / 2;
+        var best = 0, bestD = Infinity;
+        for (var i = 0; i < figs.length; i++) {
+          var r = figs[i].getBoundingClientRect();
+          var off = (r.left + r.width / 2 - mid) / (deck.clientWidth / 2);
+          var a = Math.abs(off);
+          if (a < bestD) { bestD = a; best = i; }
+          var c = clamp(off, -1.6, 1.6);
+          figs[i].style.transform =
+            'perspective(1300px) rotateY(' + (-c * 26).toFixed(2) + 'deg) translateZ(' + (-Math.abs(c) * 100).toFixed(1) + 'px) scale(' + (1 - Math.abs(c) * 0.08).toFixed(3) + ')';
+          figs[i].style.opacity = (1 - Math.min(Math.abs(c), 1) * 0.45).toFixed(3);
+          figs[i].removeAttribute('data-active');
+        }
+        figs[best].setAttribute('data-active', 'true');
+      });
+    }
+
+    function step(dir) {
+      var w = figs[0].getBoundingClientRect().width + 26;
+      deck.scrollBy({ left: dir * w, behavior: reduce ? 'auto' : 'smooth' });
+    }
+    document.getElementById('deck-prev').addEventListener('click', function () { step(-1); });
+    document.getElementById('deck-next').addEventListener('click', function () { step(1); });
+    deck.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowLeft') { e.preventDefault(); step(-1); }
+      if (e.key === 'ArrowRight') { e.preventDefault(); step(1); }
+    });
+
+    // Drag to pan. Pointer capture keeps the gesture alive past the deck edges.
+    var dragging = false, startX = 0, startScroll = 0, moved = 0;
+    deck.addEventListener('pointerdown', function (e) {
+      if (e.pointerType === 'touch') return;         // let the browser own touch scrolling
+      dragging = true; moved = 0;
+      startX = e.clientX; startScroll = deck.scrollLeft;
+      deck.classList.add('dragging');
+      deck.setPointerCapture(e.pointerId);
+    });
+    deck.addEventListener('pointermove', function (e) {
+      if (!dragging) return;
+      var dx = e.clientX - startX;
+      moved = Math.max(moved, Math.abs(dx));
+      deck.scrollLeft = startScroll - dx;
+    });
+    ['pointerup', 'pointercancel'].forEach(function (ev) {
+      deck.addEventListener(ev, function (e) {
+        if (!dragging) return;
+        dragging = false;
+        deck.classList.remove('dragging');
+        if (deck.hasPointerCapture(e.pointerId)) deck.releasePointerCapture(e.pointerId);
+      });
+    });
+    // Centre the deck on load without animating the page.
+    requestAnimationFrame(function () {
+      deck.scrollLeft = (deck.scrollWidth - deck.clientWidth) / 2;
+    });
+  }
+
+  /* ---------------- Feature cards: tilt towards the pointer ---------------- */
+  if (fine && !reduce) {
+    document.querySelectorAll('#feature-grid .card').forEach(function (card) {
+      card.addEventListener('pointermove', function (e) {
+        var r = card.getBoundingClientRect();
+        var nx = (e.clientX - r.left) / r.width, ny = (e.clientY - r.top) / r.height;
+        card.style.setProperty('--px', (nx * 100).toFixed(1) + '%');
+        card.style.setProperty('--py', (ny * 100).toFixed(1) + '%');
+        card.style.transform =
+          'perspective(900px) rotateX(' + ((0.5 - ny) * 7).toFixed(2) + 'deg) rotateY(' + ((nx - 0.5) * 9).toFixed(2) + 'deg) translateY(-4px)';
+      });
+      card.addEventListener('pointerleave', function () {
+        card.style.transform = '';
+        card.style.transition = 'transform .5s cubic-bezier(.22,.75,.3,1)';
+        setTimeout(function () { card.style.transition = ''; }, 500);
+      });
+    });
+  }
+})();
 </script>
 
 </body>
