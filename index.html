@@ -743,8 +743,8 @@
 
             <div class="hud-card">
               <div class="hud-title">Your trend</div>
-              <div class="readout"><b id="kg">84.0</b><small>kg</small></div>
-              <div class="delta" id="delta">The trend, not the daily noise</div>
+              <div class="readout"><b id="kg">78.4</b><small>kg</small></div>
+              <div class="delta"><span id="togo">8.4</span> kg to go</div>
               <svg class="spark" viewBox="0 0 200 56">
                 <path class="area" id="spark-area" d="" />
                 <path id="spark-line" d="" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100" />
@@ -1153,14 +1153,16 @@
     });
 
     // Weekly weigh-ins behind the trend line: real-looking, not a clean slope.
-    var WEIGH = [84.0, 83.4, 83.5, 82.6, 82.0, 81.9, 81.1, 80.4, 80.5, 79.7, 79.2, 78.8, 78.4];
+    var START = 78.4, GOAL = 70.0;
+    var WEIGH = [78.4, 77.9, 77.9, 77.1, 76.4, 76.3, 75.5, 74.7, 74.8, 73.6, 72.6, 71.4, 70.0];
     var line = document.getElementById('spark-line');
     var area = document.getElementById('spark-area');
     var dot = document.getElementById('spark-dot');
-    // x spreads the 13 weigh-ins across the box; y maps 78.0kg to the floor
-    // and 84.5kg to the ceiling, so the line falls as the weight does.
+    // x spreads the 13 weigh-ins across the box; y maps the goal to the floor
+    // and a little above the start to the ceiling, so the line falls as the
+    // weight does and lands on the goal.
     var pts = WEIGH.map(function (w, i) {
-      return [6 + (i / (WEIGH.length - 1)) * 188, 50 - ((w - 78.0) / 6.5) * 42];
+      return [6 + (i / (WEIGH.length - 1)) * 188, 50 - ((w - (GOAL - 0.5)) / 9.5) * 42];
     });
     var d = pts.map(function (p, i) { return (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1); }).join(' ');
     line.setAttribute('d', d);
@@ -1170,6 +1172,7 @@
     var rings = [0, 1, 2, 3].map(function (i) { return document.getElementById('r' + i); });
     var arc = document.getElementById('arc-fill');
     var kgEl = document.getElementById('kg');
+    var toGoEl = document.getElementById('togo');
 
     // The beats sit on top of each other, so the box needs to be as tall as the
     // tallest one, measured rather than guessed, or long copy spills over the HUD.
@@ -1247,7 +1250,11 @@
       }
 
       // The readout tracks the line being drawn beside it, nothing more.
-      kgEl.textContent = (84.0 - 5.6 * smooth(p)).toFixed(1);
+      // Not named `eased`: that is the pointer offset this function already
+      // uses for the phone's rotation, and shadowing it kills the frame loop.
+      var e = smooth(p);
+      kgEl.textContent = (START - (START - GOAL) * e).toFixed(1);
+      toGoEl.textContent = ((START - GOAL) * (1 - e)).toFixed(1);
 
       line.setAttribute('stroke-dashoffset', (100 - 100 * p).toFixed(2));
       area.style.opacity = p.toFixed(2);
