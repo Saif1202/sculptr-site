@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- confirmed.html is left out on purpose: it is where the confirmation email
+     lands, not a page anyone should reach from a search result. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://sculptr-app.com/</loc>
+    <lastmod>2026-08-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://sculptr-app.com/support.html</loc>
+    <lastmod>2026-08-23</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://sculptr-app.com/privacy-policy.html</loc>
+    <lastmod>2026-08-23</lastmod>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://sculptr-app.com/terms.html</loc>
+    <lastmod>2026-08-23</lastmod>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://sculptr-app.com/delete-account.html</loc>
+    <lastmod>2026-08-23</lastmod>
+    <priority>0.4</priority>
+  </url>
+</urlset>
