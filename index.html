@@ -49,8 +49,14 @@
        every accent on the page comes from this block, which is what lets the
        dark palette below swap the whole site by redefining the same names. */
     --bg:#FAF3EA; --surface:#FFFFFF; --surface-2:#F6EEE2; --line:#F0E6D9;
-    --ink:#443A33; --mute:#8D8178; --accent:#B87333; --accent-soft:#F3E4D0;
+    --ink:#443A33; --mute:#756A61; --accent:#B87333; --accent-soft:#F3E4D0;
     --accent-text:#B87333; --on-accent:#FFFFFF;
+    /* Copper 600 from the ramp. The signature copper carries white text at only
+       3.79:1, under AA, so filled controls sit one step darker. */
+    --accent-strong:#A9632F;
+    /* Copper 700, for copper set as small text. The signature reads 3.04:1 on
+       the pale copper chip; large display type keeps the signature itself. */
+    --accent-ink:#8C5425;
     /* The R is the one sacred colour. Brand copper on cream, and copper 300 on
        plum, which is how the guidelines themselves set the dark lockup. */
     --wordmark:#B87333;
@@ -88,6 +94,8 @@
       --bg:#221D28; --surface:#2E2832; --surface-2:#38323E; --line:#3C3642;
       --ink:#F3EBE1; --mute:#B9AEB9; --accent:#DEA862; --accent-soft:#4A332D;
       --accent-text:#DEA862; --on-accent:#221D28; --wordmark:#DEA862;
+      --accent-strong:#DEA862;
+      --accent-ink:#DEA862;
       --sage:#2F4338; --sage-ink:#8CC9A0; --sky:#2F3F4F; --sky-ink:#92B0D4;
       --peach:#4A332D; --butter:#443D2B; --gold:#ECC067;
       --badge-bg:#F3EBE1; --badge-ink:#221D28;
@@ -110,6 +118,8 @@
     --bg:#221D28; --surface:#2E2832; --surface-2:#38323E; --line:#3C3642;
     --ink:#F3EBE1; --mute:#B9AEB9; --accent:#DEA862; --accent-soft:#4A332D;
     --accent-text:#DEA862; --on-accent:#221D28; --wordmark:#DEA862;
+    --accent-strong:#DEA862;
+    --accent-ink:#DEA862;
     --sage:#2F4338; --sage-ink:#8CC9A0; --sky:#2F3F4F; --sky-ink:#92B0D4;
     --peach:#4A332D; --butter:#443D2B; --gold:#ECC067;
     --badge-bg:#F3EBE1; --badge-ink:#221D28;
@@ -139,7 +149,7 @@
     overflow-x:hidden;
   }
 
-  a{color:var(--accent-text); text-decoration:none}
+  a{color:var(--accent-ink); text-decoration:none}
   a:hover{text-decoration:underline}
   :focus-visible{outline:none; box-shadow:var(--ring-focus); border-radius:12px}
   img{max-width:100%}
@@ -154,7 +164,7 @@
   h2{font-size:clamp(28px,3.6vw,40px); font-weight:900; margin:0 0 10px}
   .lead{font-size:18px; color:var(--mute); max-width:31em; margin:0 0 28px}
 
-  .eyebrow{display:inline-flex; align-items:center; gap:8px; background:var(--accent-soft); color:var(--accent-text);
+  .eyebrow{display:inline-flex; align-items:center; gap:8px; background:var(--accent-soft); color:var(--accent-ink);
            border-radius:999px; padding:7px 15px; font-size:13px; font-weight:800; letter-spacing:.4px; text-transform:uppercase}
   .eyebrow .dot{width:7px; height:7px; border-radius:50%; background:var(--accent)}
   html:not(.reduce) .eyebrow .dot{animation:pulse 2.4s ease-in-out infinite}
@@ -179,14 +189,14 @@
       height:var(--nav-h); padding:0 22px; max-width:var(--maxw); margin:0 auto}
   nav .links{display:flex; align-items:center; gap:24px}
   nav .links a{color:var(--ink); font-weight:700; font-size:15px; position:relative}
-  nav .links a:not(.btn):hover{text-decoration:none; color:var(--accent-text)}
+  nav .links a:not(.btn):hover{text-decoration:none; color:var(--accent-ink)}
   nav .links a:not(.btn)::after{content:''; position:absolute; left:0; right:0; bottom:-6px; height:2px;
       background:var(--accent); border-radius:2px; transform:scaleX(0); transform-origin:left; transition:transform .25s ease}
   nav .links a:not(.btn):hover::after{transform:scaleX(1)}
   .scrollbar{position:absolute; left:0; bottom:-1px; height:2px; width:100%; transform:scaleX(0); transform-origin:left;
              background:linear-gradient(90deg,var(--accent),var(--gold)); will-change:transform}
 
-  .btn{display:inline-flex; align-items:center; justify-content:center; gap:8px; background:var(--accent); color:var(--on-accent) !important;
+  .btn{display:inline-flex; align-items:center; justify-content:center; gap:8px; background:var(--accent-strong); color:var(--on-accent) !important;
        border-radius:999px; padding:11px 20px; font-weight:800; font-size:15px; text-decoration:none !important; border:none; cursor:pointer;
        box-shadow:0 8px 20px rgba(184,115,51,.28); transition:transform .16s ease, box-shadow .16s ease, filter .16s ease}
   .btn:hover{filter:brightness(1.06); transform:translateY(-2px); box-shadow:0 14px 26px rgba(184,115,51,.34)}
@@ -257,7 +267,7 @@
 
   .cue{display:flex; flex-direction:column; align-items:center; gap:8px; width:max-content; margin:6px auto 0;
        color:var(--mute); font-size:13px; font-weight:800; letter-spacing:.3px}
-  .cue:hover{text-decoration:none; color:var(--accent-text)}
+  .cue:hover{text-decoration:none; color:var(--accent-ink)}
   .cue i{width:12px; height:12px; border-right:2px solid currentColor; border-bottom:2px solid currentColor;
          transform:rotate(45deg) translate(-2px,-2px); border-radius:0 0 2px 0}
   html:not(.reduce) .cue i{animation:nudge 1.9s ease-in-out infinite}
@@ -302,7 +312,7 @@
   .js .beat.on{pointer-events:auto}
   .beat .kicker{display:inline-flex; align-self:flex-start; align-items:center; gap:9px; background:var(--surface);
                 border-radius:999px; padding:6px 14px 6px 7px; font-size:12px; font-weight:900; letter-spacing:.5px;
-                text-transform:uppercase; color:var(--accent-text); box-shadow:var(--shadow-sm)}
+                text-transform:uppercase; color:var(--accent-ink); box-shadow:var(--shadow-sm)}
   .beat .kicker i{width:22px; height:22px; border-radius:50%; background:var(--accent-soft); display:grid;
                   place-items:center; font-style:normal; font-size:12px}
   .beat h3{font-size:clamp(24px,2.8vw,33px); font-weight:900; margin:14px 0 10px; line-height:1.14}
@@ -359,7 +369,7 @@
                border-radius:999px; padding:7px 14px; font:inherit; font-size:12.5px; font-weight:800; cursor:pointer;
                transition:color .25s ease, background .25s ease, border-color .25s ease, transform .18s ease}
   .rail button:hover{transform:translateY(-2px); color:var(--ink)}
-  .rail button[aria-current="true"]{background:var(--accent); border-color:var(--accent); color:var(--on-accent)}
+  .rail button[aria-current="true"]{background:var(--accent-strong); border-color:var(--accent-strong); color:var(--on-accent)}
   .journey-note{text-align:center; color:var(--mute); font-size:12.5px; font-weight:700; margin:14px 0 0; opacity:.85}
 
   /* Below 1040 the stage stacks. Everything is sized against the viewport
@@ -480,7 +490,7 @@
   .steps{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:18px}
   .step{background:var(--surface); border-radius:24px; padding:26px; display:flex; gap:15px; align-items:flex-start;
         box-shadow:var(--shadow-sm); border:1px solid var(--line)}
-  .num{flex:none; width:36px; height:36px; border-radius:50%; background:var(--accent); color:var(--on-accent);
+  .num{flex:none; width:36px; height:36px; border-radius:50%; background:var(--accent-strong); color:var(--on-accent);
        display:grid; place-items:center; font-weight:900; box-shadow:0 6px 14px rgba(184,115,51,.3)}
   .step p{margin:0; font-size:15px}
 
@@ -503,7 +513,7 @@
              box-shadow:var(--shadow-sm); transition:transform .16s ease}
   .socials a:hover{transform:translateY(-3px)}
   .socials svg{width:19px; height:19px; fill:var(--ink)}
-  .socials a:hover svg{fill:var(--accent-text)}
+  .socials a:hover svg{fill:var(--accent-ink)}
   .legal{margin-top:24px; font-size:13px}
 
   /* ---------------- Reduced motion: everything still works, nothing moves ---- */
@@ -687,7 +697,7 @@
               <h3>The plan keeps up with you.</h3>
               <p>Your weight and your check in feed straight back into your calories and your cardio, so the plan never sits still while your body is changing.</p>
               <ul><li>Weekly recalibration</li><li>Trend, not daily noise</li><li>Streak intact</li></ul>
-              <img class="beat-shot" src="assets/06-progress.png" alt="Progress screen with weight trend" loading="lazy" />
+              <img class="beat-shot" src="assets/11-today.png" alt="Today: the weight gauge tracking towards the goal, calories, steps and macros" loading="lazy" />
             </article>
           </div>
 
@@ -712,7 +722,7 @@
                 <img class="screen" src="assets/03-sola.png" width="520" height="1018" alt="Chatting with Sola" loading="lazy" />
                 <img class="screen" src="assets/10-team-activity.png" width="520" height="1018" alt="Team activity feed" loading="lazy" />
                 <img class="screen" src="assets/08-body.png" width="520" height="1018" alt="Muscle recovery map" loading="lazy" />
-                <img class="screen" src="assets/06-progress.png" width="520" height="1018" alt="Progress and weight trend" loading="lazy" />
+                <img class="screen" src="assets/11-today.png" width="520" height="1018" alt="Today: the weight gauge tracking towards the goal, calories, steps and macros" loading="lazy" />
               </div>
               <span class="glare" aria-hidden="true"></span>
             </div>
