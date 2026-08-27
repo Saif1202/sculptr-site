@@ -31,7 +31,7 @@
 <body>
   <div class="wrap">
     <h1>Sculpt<span>R</span> Privacy Policy</h1>
-    <p class="updated">Last updated: 22 August 2026</p>
+    <p class="updated">Last updated: 27 August 2026</p>
 
     <p>This Privacy Policy explains what personal data the SculptR mobile app ("SculptR", "we", "us", "our")
       collects, how and why we use it, who we share it with, and the rights you have. It is written to meet
@@ -63,6 +63,10 @@
         permissions).</li>
       <li><b>Content you create.</b> Logged foods and workouts, saved meals, plans, and your messages to the
         in-app AI coach ("Sola").</li>
+      <li><b>Profile picture.</b> Optional. If you add one, the image is resized on your device and stored
+        in a private area of our storage that only you and members of teams you belong to can read, and only
+        through short-lived links. Your teammates see it beside your name. You can change or remove it at any
+        time, and removing it deletes the stored image.</li>
       <li><b>Camera and photos.</b> If you scan a barcode, the camera reads the product code in real time and
         no image is stored. If you use AI meal-photo analysis, the photo is sent to our AI provider to
         estimate nutrition and is not stored by us afterwards. If you add <b>progress photos</b> to a weekly
@@ -76,12 +80,18 @@
         that image stays on your device and is only passed to your device's share sheet when you tap share.
         We do not upload or store photos you attach to share cards. Photos and videos you attach to a
         <b>team post</b> are different: those are uploaded to our storage so your teammates can see them.
-        See "Teams" below.</li>
+        See "Teams" below. We never scan your photo library. On Android you choose images through the system
+        photo picker, so the app only receives the items you pick and has no access to the rest of your
+        library.</li>
       <li><b>Teams content.</b> If you choose to create or join a team, we store the team name, its join
         code, your membership, and the display name you use in that team. We also store the summary counters
         your app publishes to your team (your streak, your steps today, whether you trained today, and how
         many workouts you logged this week), anything you explicitly publish to your team page including any
-        photos or videos you attach, and the likes and comments you leave on other members' posts. See "Teams" below for who can see this.</li>
+        photos or videos you attach, and the likes, comments and tags you leave on other members' posts. If
+        you tag somebody, we handle the notification token for their device so the tag can be delivered as a
+        push notification, and we keep each member's notification preference. If you report a post or
+        comment, or block a member, we keep a record of that report or block so we can act on it.
+        See "Teams" below for who can see this.</li>
       <li><b>Subscription data.</b> If you subscribe, your subscription status and an app-generated user
         identifier are processed by our payments partners. We never receive your full payment card details.</li>
     </ul>
@@ -97,7 +107,8 @@
       <li><b>Performance of a contract</b> (Art. 6(1)(b)): to create your account, provide the app's
         features you request, and manage your subscription.</li>
       <li><b>Legitimate interests</b> (Art. 6(1)(f)): to keep the service secure, prevent abuse, and
-        maintain reliability, balanced against your rights.</li>
+        maintain reliability, balanced against your rights. This includes handling reports and blocks in
+        teams so that members can be protected from unwanted content.</li>
     </ul>
 
     <h2>How we use your information</h2>
@@ -108,8 +119,10 @@
         sent to our AI provider (<b>Anthropic</b>) through a secure server function. We do not send your
         email address or account identifiers to the AI provider, and it does not use your data to train its
         models under our API terms.</li>
-      <li>To run Teams, if you use it: to show your summary counters and your published posts to the other
-        members of your team, and to show you theirs. See "Teams" below.</li>
+      <li>To run Teams, if you use it: to show your summary counters, your profile picture and your
+        published posts to the other members of your team, to show you theirs, to deliver the comments and
+        tags you and they create, and to send a push notification when somebody tags you, if you have that
+        turned on. See "Teams" below.</li>
       <li>To manage your subscription and restore purchases.</li>
       <li>To secure the service and enforce fair-use limits.</li>
     </ul>
@@ -121,14 +134,14 @@
       team or teams you belong to, never to other SculptR users, and never on the open internet.</p>
     <p>Two kinds of information become visible to your teammates:</p>
     <ul>
-      <li><b>Your summary counters</b>, shown on the team's member list: your display name, your logging
-        streak, your step count for today, whether you trained today, and how many workouts you logged in
-        the last seven days. These
+      <li><b>Your summary counters</b>, shown on the team's member list: your display name, your profile
+        picture if you set one, your logging streak, your step count for today, whether you trained today,
+        and how many workouts you logged in the last seven days. These
         update while you are a member of a team.</li>
       <li><b>What you publish</b>, shown on the team page: a workout and the exercises you chose to include,
         a step count, or a note, each with a short title and an optional description you write yourself, plus
-        up to four photos or videos you attach, and the likes and comments you leave on other members' posts.
-        Publishing is always a separate, explicit action; logging something never posts it.</li>
+        up to four photos or videos you attach, and the likes, comments and tags you leave on other members'
+        posts. Publishing is always a separate, explicit action; logging something never posts it.</li>
     </ul>
     <p><b>Photos and videos on posts.</b> Anything you attach to a team post is uploaded to private storage
       hosted by Supabase and is served only through short-lived signed links to members of that team.
@@ -168,6 +181,8 @@
       <tr><td><b>Apple</b></td><td>Sign in with Apple, Apple Health (opt-in), and App Store payment processing.</td></tr>
       <tr><td><b>Google</b></td><td>Sign in with Google and Google Play payment processing (Android).</td></tr>
       <tr><td><b>Open Food Facts</b></td><td>Looks up product nutrition when you scan or enter a barcode.</td></tr>
+      <tr><td><b>US Department of Agriculture (FoodData Central)</b></td><td>Looks up nutrition for generic whole foods.</td></tr>
+      <tr><td><b>Expo</b></td><td>Delivers push notifications to your device, for example when a teammate tags you.</td></tr>
     </table>
     <p>We do not sell your personal data, and we do not use it for third-party advertising.</p>
 
@@ -180,7 +195,8 @@
     <h2>Data retention</h2>
     <p>We keep your account and associated data for as long as your account is active. Team posts, their attached photos and videos, comments
       and likes are kept until you delete them, until the team is deleted, or until you delete your account,
-      whichever comes first; leaving a team stops your counters being shared with it. When you delete your
+      whichever comes first; leaving a team stops your counters being shared with it. Your profile picture is
+      deleted when you remove it or delete your account. When you delete your
       account, we remove it from our live systems immediately and from encrypted backups within 30 days.
       Content sent to our AI provider may be retained by that provider for a limited period (up to around 30
       days) to detect misuse, after which it is deleted. We may keep minimal records where required to
@@ -211,8 +227,10 @@
 
     <h2>Security</h2>
     <p>We protect your data with encrypted connections, database row-level security that limits each record
-      to its owner, and server-side controls on sensitive actions. No system is perfectly secure, but we
-      work to protect your information.</p>
+      to its owner, and server-side controls on sensitive actions. Photos, videos and profile pictures are
+      held in private storage and are served through links that expire, rather than through public
+      addresses, so they cannot be fetched by anyone outside the team they were shared with. No system is
+      perfectly secure, but we work to protect your information.</p>
 
     <h2>Data breaches</h2>
     <p>If a personal data breach occurs that is likely to result in a risk to your rights and freedoms, we
